@@ -116,7 +116,7 @@ O Banco Original performou **16 pontos acima** do PicPay. Ambos cometem os mesmo
 
 A diferença está no que o Original **não tem**: nenhum botão sem nome, nenhum problema de contraste, nenhum link sem texto discernível — indicando maior maturidade no processo de desenvolvimento acessível.
 
-> Os JSONs brutos das auditorias estão em [`evidencias/lighthouse-picpay-raw.json`](./evidencias/lighthouse-picpay-raw.json) e [`evidencias/lighthouse-original-raw.json`](./evidencias/lighthouse-original-raw.json).
+> Os JSONs brutos das auditorias estão em [`lighthouse-picpay-raw.json`](./lighthouse-picpay-raw.json) e [`lighthouse-original-raw.json`](./lighthouse-original-raw.json).
 
 ---
 
