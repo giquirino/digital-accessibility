@@ -170,6 +170,46 @@ Qualquer score abaixo de 90 deve bloquear o merge — da mesma forma que um test
 
 ---
 
+## Lighthouse via CLI vs. F12 (DevTools) — Qual a diferença?
+
+Uma dúvida comum é: **se o Lighthouse já está dentro do Chrome DevTools (F12 > aba Lighthouse), por que instalar via `npm` e rodar por comando?**
+
+São duas formas de usar a **mesma ferramenta**, mas com propósitos diferentes:
+
+| | F12 (DevTools) | CLI (`npm install -g lighthouse`) |
+|---|---|---|
+| **Como roda** | Manual — abre o browser, aperta F12, clica na aba Lighthouse, clica em "Analyze" | Automatizado — roda um comando no terminal |
+| **Resultado** | Relatório visual na tela do browser | Arquivo JSON/HTML salvo no disco |
+| **Reproduzível?** | Não — depende de quem rodou, quando, com quais abas abertas | Sim — mesmo comando gera mesmo resultado |
+| **Versionável?** | Não — teria que tirar print | Sim — o JSON vai pro repositório como evidência |
+| **Integrável no CI/CD?** | Não — não dá pra abrir F12 num servidor de CI | Sim — roda em qualquer pipeline automatizado |
+| **Uso ideal** | Diagnóstico rápido durante o desenvolvimento | Evidência formal, quality gate, automação |
+
+### O que é o DevTools (F12)?
+
+O Chrome DevTools é o painel que abre quando vc aperta F12 ou clica em "Inspecionar". Ele tem **várias abas**, cada uma com um propósito diferente:
+
+- **Elements** — ver e editar HTML/CSS da página em tempo real
+- **Console** — ver `console.log`, erros de JavaScript, executar comandos
+- **Network** — ver requisições HTTP, tempo de resposta, payloads
+- **Lighthouse** — rodar auditorias automatizadas (performance, acessibilidade, SEO)
+- **Sources, Application, Performance...** — debugging avançado
+
+O Lighthouse é **uma aba específica** dentro do DevTools — não é o DevTools inteiro. Ver CSS e console.log são as abas Elements e Console respectivamente.
+
+### Por que o projeto usa via CLI?
+
+Porque o objetivo é demonstrar um **fluxo profissional de qualidade**. No dia a dia de um time de desenvolvimento:
+
+1. O dev roda `lighthouse` no terminal antes de abrir o PR
+2. O JSON gerado vai como evidência no repositório
+3. No CI/CD, o pipeline roda o mesmo comando automaticamente
+4. Se o score ficar abaixo de 90, o merge é bloqueado
+
+Isso elimina o fator humano — ninguém precisa lembrar de abrir o F12 e conferir. A máquina faz isso em toda PR, toda vez.
+
+---
+
 ## Referências
 
 Veja o arquivo [`references.md`](./references.md) para a lista completa de fontes.
