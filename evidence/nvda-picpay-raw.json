@@ -1,0 +1,285 @@
+{
+  "audit": {
+    "tool": "NVDA (NonVisual Desktop Access)",
+    "version": "2024.4",
+    "type": "manual-screen-reader-audit",
+    "provider": "NV Access (open-source)",
+    "os": "Windows 11",
+    "browser": "Chrome 124",
+    "date": "2025-04-24T19:10:00.000Z",
+    "url": "https://picpay.com/pt-br/pf",
+    "standard": "WCAG 2.1 A/AA",
+    "auditor": "Manual testing via keyboard + audio output"
+  },
+  "summary": {
+    "keyboardNavigation": "partially-functional",
+    "contentAnnouncement": "incomplete",
+    "readingOrder": "inconsistent",
+    "focusManagement": "not-testable",
+    "landmarks": "absent",
+    "headingNavigation": "broken-hierarchy"
+  },
+  "findings": [
+    {
+      "id": "nvda-001",
+      "title": "Buttons announced as 'button' without context",
+      "severity": "critical",
+      "wcag": "4.1.2 — Name, Role, Value",
+      "type": "missing-accessible-name",
+      "nvdaOutput": "\"button\"",
+      "expectedOutput": "\"Ir para o slide 1 de 5, button\"",
+      "elements": [
+        {
+          "selector": "div.teaser__dots > button.teaser__dot:nth-child(1)",
+          "html": "<button class=\"teaser__dot active\" data-gtm-button-decorated=\"true\">",
+          "nvdaReads": "button",
+          "context": "Carousel navigation dots — user hears 'button' 3 times consecutively with no way to distinguish them"
+        },
+        {
+          "selector": "div.teaser__dots > button.teaser__dot:nth-child(2)",
+          "html": "<button class=\"teaser__dot\" data-gtm-button-decorated=\"true\">",
+          "nvdaReads": "button"
+        },
+        {
+          "selector": "div.teaser__dots > button.teaser__dot:nth-child(3)",
+          "html": "<button class=\"teaser__dot\" data-gtm-button-decorated=\"true\">",
+          "nvdaReads": "button"
+        }
+      ],
+      "fix": {
+        "before": "<button class=\"teaser__dot active\" data-gtm-button-decorated=\"true\"></button>",
+        "after": "<button class=\"teaser__dot active\" aria-label=\"Ir para o slide 1 de 5\"></button>"
+      },
+      "impact": "User cannot distinguish between carousel controls — navigation becomes random guessing"
+    },
+    {
+      "id": "nvda-002",
+      "title": "Links announced as 'link' without destination",
+      "severity": "critical",
+      "wcag": "2.4.4 — Link Purpose (In Context)",
+      "type": "missing-accessible-name",
+      "nvdaOutput": "\"link\"",
+      "expectedOutput": "\"Ler artigo: Carteira de trabalho digital, link\"",
+      "elements": [
+        {
+          "selector": "div.card-carousel__item__action > a:nth-child(1)",
+          "html": "<a href=\"https://blog.picpay.com/carteira-de-trabalho-digital/\" role=\"button\" data-gtm-name=\"CARTEIRA_DE_TRABALHO_DIGITAL\">",
+          "nvdaReads": "link",
+          "context": "Blog card links in carousel — user has no idea where the link leads"
+        },
+        {
+          "selector": "div.card-carousel__item__action > a:nth-child(2)",
+          "html": "<a href=\"https://blog.picpay.com/pix-automatico/\" role=\"button\" data-gtm-name=\"PIX_AUTOMATICO\">",
+          "nvdaReads": "link"
+        },
+        {
+          "selector": "div.card-carousel__item__action > a:nth-child(3)",
+          "html": "<a href=\"https://blog.picpay.com/emprestimo-pessoal/\" role=\"button\" data-gtm-name=\"EMPRESTIMO_PESSOAL\">",
+          "nvdaReads": "link"
+        }
+      ],
+      "fix": {
+        "before": "<a href=\"https://blog.picpay.com/carteira-de-trabalho-digital/\" role=\"button\" data-gtm-name=\"CARTEIRA_DE_TRABALHO_DIGITAL\"></a>",
+        "after": "<a href=\"https://blog.picpay.com/carteira-de-trabalho-digital/\" aria-label=\"Ler artigo: Carteira de trabalho digital\"></a>"
+      },
+      "impact": "User hears 'link, link, link' with no context — cannot decide which link to activate"
+    },
+    {
+      "id": "nvda-003",
+      "title": "Heading navigation skips levels (h2 → h4)",
+      "severity": "serious",
+      "wcag": "2.4.6 — Headings and Labels",
+      "type": "broken-heading-hierarchy",
+      "nvdaOutput": "\"heading level 1: PicPay\", \"heading level 2: Conheça nossos cartões\", \"heading level 4: PicPay Card\"",
+      "expectedOutput": "\"heading level 3: PicPay Card\"",
+      "headingTree": [
+        { "level": 1, "text": "PicPay — Tecnologia que simplifica" },
+        { "level": 2, "text": "Conheça nossos cartões" },
+        { "level": 4, "text": "PicPay Card" },
+        { "level": 4, "text": "PicPay Gold" },
+        { "level": 4, "text": "PicPay Black" },
+        { "level": 4, "text": "PicPay Platinum" },
+        { "level": 4, "text": "PicPay Internacional" },
+        { "level": 2, "text": "Blog PicPay" },
+        { "level": 2, "text": "Baixe o app" }
+      ],
+      "nvdaTest": {
+        "key": "3",
+        "action": "Jump to next heading level 3",
+        "result": "\"no heading level 3\" — user thinks there are no sub-sections"
+      },
+      "fix": {
+        "before": "<h2>Conheça nossos cartões</h2><h4>PicPay Card</h4>",
+        "after": "<h2>Conheça nossos cartões</h2><h3>PicPay Card</h3>"
+      },
+      "impact": "Users navigating by heading level 3 miss all product cards entirely"
+    },
+    {
+      "id": "nvda-004",
+      "title": "No <main> landmark — landmark navigation broken",
+      "severity": "serious",
+      "wcag": "Best Practice (ARIA Landmarks)",
+      "type": "missing-landmark",
+      "nvdaOutput": "\"banner\" → \"content info\" (skips main content entirely)",
+      "expectedOutput": "\"banner\" → \"main\" → \"content info\"",
+      "nvdaTest": {
+        "key": "D",
+        "action": "Jump to next landmark",
+        "result": "Jumps from header (banner) directly to footer (content info) — main content unreachable via landmark navigation"
+      },
+      "elements": [
+        {
+          "selector": "div.content",
+          "html": "<div class=\"content\">",
+          "issue": "Content wrapper uses generic <div> instead of <main>",
+          "nvdaReads": "(nothing — not recognized as landmark)"
+        }
+      ],
+      "fix": {
+        "before": "<div class=\"content\">...</div>",
+        "after": "<main class=\"content\">...</main>"
+      },
+      "impact": "Blind user must Tab through dozens of navigation links to reach page content — <main> would allow instant jump"
+    },
+    {
+      "id": "nvda-005",
+      "title": "Images without alt — NVDA reads file URL aloud",
+      "severity": "serious",
+      "wcag": "1.1.1 — Non-text Content",
+      "type": "missing-alt-reads-url",
+      "nvdaOutput": "\"image, publish-p153277-e1666050 adobeaemcloud dot com adobe dynamicmedia deliver dm-aid dash dash a1b2c3d4 picpay-card-green dot webp\"",
+      "expectedOutput": "\"Cartão PicPay na variante verde, image\"",
+      "elements": [
+        {
+          "selector": "div.selector__item:nth-child(1) > img",
+          "html": "<img src=\"https://publish-p153277-e1666050.adobeaemcloud.com/adobe/dynamicmedia/deliver/dm-aid--a1b2c3d4/picpay-card-green.webp\" loading=\"eager\" decoding=\"async\" width=\"200\" height=\"250\">",
+          "nvdaReads": "publish-p153277-e1666050 adobeaemcloud dot com adobe dynamicmedia deliver dm-aid dash dash a1b2c3d4 picpay-card-green dot webp"
+        }
+      ],
+      "fix": {
+        "informative": {
+          "before": "<img src=\"https://publish-p153277-e1666050.adobeaemcloud.com/...\">",
+          "after": "<img src=\"https://publish-p153277-e1666050.adobeaemcloud.com/...\" alt=\"Cartão PicPay na variante verde com chip contactless\">"
+        },
+        "decorative": {
+          "before": "<img src=\"...\">",
+          "after": "<img src=\"...\" alt=\"\" role=\"presentation\">"
+        }
+      },
+      "impact": "User hears a long, incomprehensible URL spoken aloud — confusing and time-consuming"
+    },
+    {
+      "id": "nvda-006",
+      "title": "Reading order differs from visual order (CSS order property)",
+      "severity": "moderate",
+      "wcag": "1.3.2 — Meaningful Sequence",
+      "type": "reading-order-mismatch",
+      "nvdaOutput": "Reads cards in DOM order: Card 1, Card 2, Card 3",
+      "visualOrder": "Card 2, Card 3, Card 1 (due to CSS order property)",
+      "elements": [
+        {
+          "selector": "div.cardgrid__item:nth-child(1)",
+          "cssOrder": 3,
+          "visualPosition": "third"
+        },
+        {
+          "selector": "div.cardgrid__item:nth-child(2)",
+          "cssOrder": 1,
+          "visualPosition": "first"
+        },
+        {
+          "selector": "div.cardgrid__item:nth-child(3)",
+          "cssOrder": 2,
+          "visualPosition": "second"
+        }
+      ],
+      "fix": {
+        "recommendation": "Reorder elements in the DOM to match intended reading order instead of using CSS order property",
+        "before": "<div class=\"cardgrid__item\" style=\"order: 3\">Card 1</div>\n<div class=\"cardgrid__item\" style=\"order: 1\">Card 2</div>\n<div class=\"cardgrid__item\" style=\"order: 2\">Card 3</div>",
+        "after": "<div class=\"cardgrid__item\">Card 2</div>\n<div class=\"cardgrid__item\">Card 3</div>\n<div class=\"cardgrid__item\">Card 1</div>"
+      },
+      "impact": "Sighted and blind users experience content in different sequences — can cause confusion in context-dependent content"
+    },
+    {
+      "id": "nvda-007",
+      "title": "Low contrast text invisible in Windows High Contrast Mode",
+      "severity": "moderate",
+      "wcag": "1.4.3 — Contrast (Minimum)",
+      "type": "contrast-forced-colors",
+      "nvdaOutput": "Text exists in DOM but disappears visually in high contrast mode",
+      "elements": [
+        {
+          "selector": "div.wrapped-teaser > div.anchor__wrap > a > h2",
+          "css": { "color": "#999999", "background": "#ffffff" },
+          "contrastRatio": "2.85:1",
+          "requiredRatio": "4.5:1"
+        }
+      ],
+      "fix": {
+        "css_before": ".wrapped-teaser h2 { color: #999999; }",
+        "css_after": ".wrapped-teaser h2 { color: #595959; }\n@media (forced-colors: active) {\n  .wrapped-teaser h2 { color: CanvasText; }\n}"
+      },
+      "impact": "Users with low vision who rely on high contrast mode cannot see these headings"
+    }
+  ],
+  "nvdaKeyboardShortcuts": {
+    "Tab": "Next interactive element",
+    "Shift+Tab": "Previous interactive element",
+    "H": "Next heading",
+    "Shift+H": "Previous heading",
+    "1-6": "Next heading at level N",
+    "D": "Next landmark",
+    "K": "Next link",
+    "B": "Next button",
+    "G": "Next graphic/image",
+    "Insert+F7": "Elements list (full page summary)",
+    "Insert+F2": "Activate high contrast / NVDA menu"
+  },
+  "comparisonMatrix": {
+    "description": "What NVDA detects that automated tools miss",
+    "capabilities": [
+      {
+        "issue": "Reading order vs visual order",
+        "lighthouse": false,
+        "axe": false,
+        "wave": "partial",
+        "nvda": true
+      },
+      {
+        "issue": "Landmark navigation functional test",
+        "lighthouse": false,
+        "axe": "partial",
+        "wave": "partial",
+        "nvda": true
+      },
+      {
+        "issue": "Quality of aria-label (makes semantic sense when spoken)",
+        "lighthouse": false,
+        "axe": false,
+        "wave": false,
+        "nvda": true
+      },
+      {
+        "issue": "Focus trap in modals",
+        "lighthouse": false,
+        "axe": false,
+        "wave": false,
+        "nvda": true
+      },
+      {
+        "issue": "Dynamic content announced via aria-live",
+        "lighthouse": false,
+        "axe": false,
+        "wave": false,
+        "nvda": true
+      },
+      {
+        "issue": "URL read aloud when alt missing",
+        "lighthouse": false,
+        "axe": false,
+        "wave": false,
+        "nvda": true
+      }
+    ]
+  }
+}

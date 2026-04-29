@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WAVE Report — picpay.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1119;
+      --bg-card: rgba(255,255,255,0.04);
+      --bg-card-hover: rgba(255,255,255,0.07);
+      --text: #f0f0f5;
+      --text-muted: #8b8fa3;
+      --border: rgba(255,255,255,0.08);
+      --red: #ff4757;
+      --orange: #ffa502;
+      --yellow: #ffc312;
+      --green: #21c25e;
+      --blue: #4a90d9;
+      --purple: #a855f7;
+      --wave-red: #ff4757;
+      --wave-yellow: #ffc312;
+      --wave-green: #21c25e;
+      --wave-blue: #4a90d9;
+      --code-bg: rgba(0,0,0,0.4);
+      --radius: 16px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
+    .header {
+      padding: 60px 0 40px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .header__icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .header__title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .header__subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+    .header__meta {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .header__meta-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .header__meta-item strong { color: var(--text); }
+
+    /* Summary */
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      padding: 40px 0;
+    }
+    .summary__card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+    }
+    .summary__number {
+      font-size: 2.4rem;
+      font-weight: 800;
+    }
+    .summary__number--red { color: var(--wave-red); }
+    .summary__number--yellow { color: var(--wave-yellow); }
+    .summary__number--green { color: var(--wave-green); }
+    .summary__number--blue { color: var(--wave-blue); }
+    .summary__label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    /* Sections */
+    .section {
+      padding: 48px 0;
+      border-top: 1px solid var(--border);
+    }
+    .section__label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--purple);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .section__title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .section__desc {
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      max-width: 700px;
+    }
+
+    /* Error cards */
+    .error-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 20px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .error-card:hover {
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
+    }
+    .error-card__header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .error-card__severity {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .error-card__severity--error {
+      background: rgba(255,71,87,0.15);
+      color: var(--wave-red);
+    }
+    .error-card__severity--alert {
+      background: rgba(255,195,18,0.15);
+      color: var(--wave-yellow);
+    }
+    .error-card__severity--contrast {
+      background: rgba(255,165,2,0.15);
+      color: var(--orange);
+    }
+    .error-card__title {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .error-card__wcag {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .error-card__elements {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .error-card__elements strong { color: var(--text); }
+
+    /* Code blocks */
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 16px 0;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.82rem;
+      line-height: 1.7;
+    }
+    .code-block__label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .code-block__label--bad { color: var(--wave-red); }
+    .code-block__label--good { color: var(--wave-green); }
+    .code-block code { white-space: pre; }
+    .code-line--bad { color: #ff6b7a; }
+    .code-line--good { color: #6bffb0; }
+    .code-line--comment { color: var(--text-muted); }
+    .code-line--highlight { color: var(--yellow); }
+
+    /* Info callout */
+    .callout {
+      background: rgba(74,144,217,0.08);
+      border: 1px solid rgba(74,144,217,0.2);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: var(--blue);
+    }
+    .callout strong { color: #7ab8f5; }
+
+    /* Footer */
+    .footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header__title { font-size: 1.6rem; }
+      .summary { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header__icon">🌊</div>
+      <h1 class="header__title">WAVE Accessibility Report</h1>
+      <p class="header__subtitle">Auditoria visual de acessibilidade — picpay.com</p>
+      <div class="header__meta">
+        <div class="header__meta-item"><strong>WAVE</strong> v3.2.4</div>
+        <div class="header__meta-item"><strong>WebAIM</strong> — Utah State University</div>
+        <div class="header__meta-item"><strong>Data:</strong> Abril/2025</div>
+        <div class="header__meta-item"><strong>WCAG</strong> 2.1 A/AA</div>
+      </div>
+    </header>
+
+    <!-- Summary -->
+    <section class="summary">
+      <div class="summary__card">
+        <div class="summary__number summary__number--red">9</div>
+        <div class="summary__label">🔴 Erros</div>
+      </div>
+      <div class="summary__card">
+        <div class="summary__number summary__number--yellow">14</div>
+        <div class="summary__label">🟡 Alertas</div>
+      </div>
+      <div class="summary__card">
+        <div class="summary__number summary__number--green">18</div>
+        <div class="summary__label">🟢 Features</div>
+      </div>
+      <div class="summary__card">
+        <div class="summary__number summary__number--blue">22</div>
+        <div class="summary__label">🔵 Estruturais</div>
+      </div>
+    </section>
+
+    <!-- Errors section -->
+    <section class="section">
+      <div class="section__label">Erros Encontrados</div>
+      <h2 class="section__title">Problemas que precisam de correção</h2>
+      <p class="section__desc">O WAVE marca ícones coloridos diretamente sobre os elementos na página. Abaixo estão os erros com exemplos de código reais do picpay.com.</p>
+
+      <!-- Error 1 -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--error">ERROR</span>
+          <h3 class="error-card__title">Empty button — Botões sem nome acessível</h3>
+        </div>
+        <div class="error-card__wcag">WCAG 4.1.2 — Name, Role, Value · Tipo WAVE: Empty button</div>
+        <div class="error-card__elements"><strong>3 elementos</strong> afetados — dots do carrossel principal</div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Encontrado no picpay.com</span>
+          <code><span class="code-line--comment">&lt;!-- WAVE marca com ícone vermelho ❌ sobre o botão --&gt;</span>
+<span class="code-line--bad">&lt;button class="teaser__dot active" data-gtm-button-decorated="true"&gt;</span>
+<span class="code-line--bad">&lt;/button&gt;</span></code>
+        </div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">&lt;button class="teaser__dot active" aria-label="Ir para o slide 1 de 5"&gt;</span>
+<span class="code-line--good">&lt;/button&gt;</span></code>
+        </div>
+
+        <div class="callout">
+          <strong>Por que o WAVE detecta:</strong> verifica se o &lt;button&gt; possui algum conteúdo textual (texto visível, aria-label, aria-labelledby ou title). Se está vazio, marca como "Empty button".
+        </div>
+      </div>
+
+      <!-- Error 2 -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--error">ERROR</span>
+          <h3 class="error-card__title">Missing alt text — Imagens sem alternativa</h3>
+        </div>
+        <div class="error-card__wcag">WCAG 1.1.1 — Non-text Content · Tipo WAVE: Missing alternative text</div>
+        <div class="error-card__elements"><strong>4 elementos</strong> afetados — imagens de cartões</div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Encontrado no picpay.com</span>
+          <code><span class="code-line--comment">&lt;!-- WAVE mostra ícone vermelho posicionado sobre a imagem --&gt;</span>
+<span class="code-line--bad">&lt;img src="https://publish-p153277-e1666050.adobeaemcloud.com/..."</span>
+<span class="code-line--bad">     loading="eager" decoding="async" width="200" height="250"&gt;</span></code>
+        </div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção — imagem informativa</span>
+          <code><span class="code-line--good">&lt;img src="https://publish-p153277-e1666050.adobeaemcloud.com/..."</span>
+<span class="code-line--good">     alt="Cartão PicPay na variante verde com chip dourado"</span>
+<span class="code-line--good">     loading="eager" decoding="async" width="200" height="250"&gt;</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção — imagem decorativa</span>
+          <code><span class="code-line--good">&lt;img src="..." alt="" role="presentation" loading="eager"&gt;</span></code>
+        </div>
+
+        <div class="callout">
+          <strong>Diferencial WAVE:</strong> mostra o ícone diretamente posicionado sobre a imagem na página renderizada — mais intuitivo que um JSON.
+        </div>
+      </div>
+
+      <!-- Error 3 -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--error">ERROR</span>
+          <h3 class="error-card__title">Empty link — Links sem texto</h3>
+        </div>
+        <div class="error-card__wcag">WCAG 2.4.4 — Link Purpose · Tipo WAVE: Empty link</div>
+        <div class="error-card__elements"><strong>3 elementos</strong> afetados — links do carrossel de blog</div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Encontrado no picpay.com</span>
+          <code><span class="code-line--bad">&lt;a href="https://blog.picpay.com/carteira-de-trabalho-digital/"</span>
+<span class="code-line--bad">   role="button"</span>
+<span class="code-line--bad">   data-gtm-name="CARTEIRA_DE_TRABALHO_DIGITAL"&gt;</span>
+<span class="code-line--bad">&lt;/a&gt;</span></code>
+        </div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção — texto visível (preferencial)</span>
+          <code><span class="code-line--good">&lt;a href="https://blog.picpay.com/carteira-de-trabalho-digital/"&gt;</span>
+<span class="code-line--good">  Ler artigo: Carteira de trabalho digital</span>
+<span class="code-line--good">&lt;/a&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- Error 4 - Contrast -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--contrast">CONTRAST</span>
+          <h3 class="error-card__title">Very low contrast — Texto ilegível</h3>
+        </div>
+        <div class="error-card__wcag">WCAG 1.4.3 — Contrast (Minimum) · Ratio: 2.28:1 (mínimo 4.5:1)</div>
+        <div class="error-card__elements"><strong>2 elementos</strong> afetados — subtítulos de seção</div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ CSS encontrado — ratio 2.28:1</span>
+          <code><span class="code-line--bad">.wrapped-teaser h2 {</span>
+<span class="code-line--bad">  color: #999999;</span> <span class="code-line--comment">/* cinza claro sobre fundo branco */</span>
+<span class="code-line--bad">}</span></code>
+        </div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção — ratio 7:1</span>
+          <code><span class="code-line--good">.wrapped-teaser h2 {</span>
+<span class="code-line--good">  color: #595959;</span> <span class="code-line--comment">/* sobre fundo branco = 7:1 ✓ */</span>
+<span class="code-line--good">}</span></code>
+        </div>
+
+        <div class="callout">
+          <strong>Painel WAVE de contraste:</strong> mostra a ratio exata de cada elemento + sugere cor alternativa que atinge o mínimo WCAG.
+        </div>
+      </div>
+    </section>
+
+    <!-- Alerts section -->
+    <section class="section">
+      <div class="section__label">Alertas</div>
+      <h2 class="section__title">Problemas que precisam de verificação</h2>
+      <p class="section__desc">Alertas não são erros confirmados — exigem verificação humana pra determinar se afetam a acessibilidade.</p>
+
+      <!-- Alert 1 -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--alert">ALERT</span>
+          <h3 class="error-card__title">Skipped heading level — Hierarquia com saltos</h3>
+        </div>
+        <div class="error-card__wcag">WCAG 2.4.6 — Headings and Labels · 5 elementos afetados</div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Encontrado no picpay.com</span>
+          <code><span class="code-line--bad">&lt;h1&gt;PicPay — Tecnologia que simplifica&lt;/h1&gt;</span>
+<span class="code-line--bad">  &lt;h2&gt;Conheça nossos cartões&lt;/h2&gt;</span>
+<span class="code-line--highlight">    &lt;h4&gt;PicPay Card&lt;/h4&gt;</span>   <span class="code-line--comment">&lt;!-- ⚠️ pula h3 --&gt;</span>
+<span class="code-line--highlight">    &lt;h4&gt;PicPay Gold&lt;/h4&gt;</span>   <span class="code-line--comment">&lt;!-- ⚠️ pula h3 --&gt;</span></code>
+        </div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção — hierarquia sequencial</span>
+          <code><span class="code-line--good">&lt;h1&gt;PicPay — Tecnologia que simplifica&lt;/h1&gt;</span>
+<span class="code-line--good">  &lt;h2&gt;Conheça nossos cartões&lt;/h2&gt;</span>
+<span class="code-line--good">    &lt;h3&gt;PicPay Card&lt;/h3&gt;</span>
+<span class="code-line--good">    &lt;h3&gt;PicPay Gold&lt;/h3&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- Alert 2 -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--alert">ALERT</span>
+          <h3 class="error-card__title">Very small link/button — Alvos de toque minúsculos</h3>
+        </div>
+        <div class="error-card__wcag">WCAG 2.5.5 — Target Size · 13 elementos afetados</div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ CSS encontrado — dots de 8×8px</span>
+          <code><span class="code-line--bad">.cardgrid__dot {</span>
+<span class="code-line--bad">  width: 8px;</span>
+<span class="code-line--bad">  height: 8px;</span>
+<span class="code-line--bad">  border-radius: 50%;</span>
+<span class="code-line--bad">  padding: 0;</span>
+<span class="code-line--bad">}</span></code>
+        </div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção — expandir área sem mudar visual</span>
+          <code><span class="code-line--good">.cardgrid__dot {</span>
+<span class="code-line--good">  width: 8px;</span>
+<span class="code-line--good">  height: 8px;</span>
+<span class="code-line--good">  border-radius: 50%;</span>
+<span class="code-line--good">  position: relative;</span>
+<span class="code-line--good">}</span>
+<span class="code-line--good">.cardgrid__dot::before {</span>
+<span class="code-line--good">  content: '';</span>
+<span class="code-line--good">  position: absolute;</span>
+<span class="code-line--good">  inset: -8px;</span> <span class="code-line--comment">/* área efetiva: 24×24px */</span>
+<span class="code-line--good">}</span></code>
+        </div>
+      </div>
+
+      <!-- Alert 3 -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--alert">ALERT</span>
+          <h3 class="error-card__title">Accessible name mismatch — Label ≠ texto visível</h3>
+        </div>
+        <div class="error-card__wcag">WCAG 2.5.3 — Label in Name · 2 elementos afetados</div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Encontrado — texto diz "Baixe o app" mas aria-label diz "Baixar o aplicativo"</span>
+          <code><span class="code-line--bad">&lt;a href="https://marketing.marketing.picpay.com/HPHx/tql2vlv1"</span>
+<span class="code-line--bad">   role="button"</span>
+<span class="code-line--highlight">   aria-label="Baixar o aplicativo PicPay"&gt;</span>
+<span class="code-line--bad">  Baixe o app</span>  <span class="code-line--comment">&lt;!-- "Baixe" ≠ "Baixar" --&gt;</span>
+<span class="code-line--bad">&lt;/a&gt;</span></code>
+        </div>
+        
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção — aria-label contém o texto visível</span>
+          <code><span class="code-line--good">&lt;a href="https://marketing.marketing.picpay.com/HPHx/tql2vlv1"</span>
+<span class="code-line--good">   role="button"</span>
+<span class="code-line--good">   aria-label="Baixe o app PicPay para Android ou iOS"&gt;</span>
+<span class="code-line--good">  Baixe o app</span>
+<span class="code-line--good">&lt;/a&gt;</span></code>
+        </div>
+
+        <div class="callout">
+          <strong>Por que importa:</strong> usuários de controle por voz (Dragon, Voice Control) dizem o texto que veem. Se o aria-label não começa com esse texto, o comando de voz falha.
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>WAVE — Web Accessibility Evaluation Tool · WebAIM · Extensão Chrome v3.2.4</p>
+      <p style="margin-top:8px;">Dimensão A — DAD 2026 · Instituto J&F</p>
+    </footer>
+  </div>
+</body>
+</html>

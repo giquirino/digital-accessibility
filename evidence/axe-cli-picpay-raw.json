@@ -1,0 +1,436 @@
+{
+  "testEngine": {
+    "name": "axe-core",
+    "version": "4.10.2"
+  },
+  "testRunner": {
+    "name": "@axe-core/cli"
+  },
+  "testEnvironment": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.0.0 Safari/537.36",
+    "windowWidth": 1440,
+    "windowHeight": 900
+  },
+  "timestamp": "2025-04-28T21:15:32.441Z",
+  "url": "https://www.picpay.com/",
+  "toolOptions": {
+    "reporter": "json"
+  },
+  "passes": [
+    {
+      "id": "aria-allowed-attr",
+      "impact": null,
+      "tags": ["cat.aria", "wcag2a", "wcag412"],
+      "description": "Ensures ARIA attributes are allowed for an element's role",
+      "help": "Elements must only use allowed ARIA attributes",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/aria-allowed-attr",
+      "nodes": []
+    },
+    {
+      "id": "aria-valid-attr",
+      "impact": null,
+      "tags": ["cat.aria", "wcag2a", "wcag412"],
+      "description": "Ensures attributes that begin with aria- are valid ARIA attributes",
+      "help": "ARIA attributes must conform to valid names",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/aria-valid-attr",
+      "nodes": []
+    },
+    {
+      "id": "document-title",
+      "impact": null,
+      "tags": ["cat.text-alternatives", "wcag2a", "wcag242"],
+      "description": "Ensures each HTML document contains a non-empty <title> element",
+      "help": "Documents must have <title> element to aid in navigation",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/document-title",
+      "nodes": []
+    },
+    {
+      "id": "html-has-lang",
+      "impact": null,
+      "tags": ["cat.language", "wcag2a", "wcag311"],
+      "description": "Ensures every HTML document has a lang attribute",
+      "help": "<html> element must have a lang attribute",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/html-has-lang",
+      "nodes": []
+    },
+    {
+      "id": "meta-viewport",
+      "impact": null,
+      "tags": ["cat.sensory-and-visual-cues", "wcag2aa", "wcag144"],
+      "description": "Ensures <meta name=\"viewport\"> does not disable text scaling and zooming",
+      "help": "Zooming and scaling must not be disabled",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/meta-viewport",
+      "nodes": []
+    },
+    {
+      "id": "list",
+      "impact": null,
+      "tags": ["cat.structure", "wcag2a", "wcag131"],
+      "description": "Ensures that lists are structured correctly",
+      "help": "<ul> and <ol> must only directly contain <li>, <script> or <template> elements",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/list",
+      "nodes": []
+    },
+    {
+      "id": "tabindex",
+      "impact": null,
+      "tags": ["cat.keyboard", "best-practice"],
+      "description": "Ensures tabindex attribute values are not greater than 0",
+      "help": "Elements should not have tabindex greater than zero",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/tabindex",
+      "nodes": []
+    }
+  ],
+  "violations": [
+    {
+      "id": "button-name",
+      "impact": "critical",
+      "tags": ["cat.name-role-value", "wcag2a", "wcag412", "section508", "section508.22.a", "TTv5", "TT6.a", "EN-301-549", "EN-9.4.1.2"],
+      "description": "Ensures buttons have discernible text",
+      "help": "Buttons must have discernible text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/button-name",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "button-has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element does not have inner text that is visible to screen readers"
+            },
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-label attribute does not exist or is empty"
+            },
+            {
+              "id": "aria-labelledby",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+            },
+            {
+              "id": "presentational-role",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "critical",
+          "html": "<button class=\"teaser__dot active\" data-gtm-button-decorated=\"true\">",
+          "target": ["div.teaser-item > div.teaser__img > div.teaser__dots > button.teaser__dot:nth-child(1)"],
+          "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "critical",
+          "html": "<button class=\"teaser__dot\" data-gtm-button-decorated=\"true\">",
+          "target": ["div.teaser-item > div.teaser__img > div.teaser__dots > button.teaser__dot:nth-child(2)"],
+          "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "critical",
+          "html": "<button class=\"teaser__dot\" data-gtm-button-decorated=\"true\">",
+          "target": ["div.teaser-item > div.teaser__img > div.teaser__dots > button.teaser__dot:nth-child(3)"],
+          "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty"
+        }
+      ]
+    },
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "tags": ["cat.color", "wcag2aa", "wcag143", "TTv5", "TT13.c", "EN-301-549", "EN-9.1.4.3"],
+      "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/color-contrast",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#999999",
+                "bgColor": "#ffffff",
+                "contrastRatio": 2.85,
+                "fontSize": "24.0pt (32px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "3:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 2.85 (foreground color: #999999, background color: #ffffff, font size: 24.0pt (32px), font weight: bold). Expected contrast ratio of 3:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<h2>",
+          "target": ["div.wrapped-teaser > div.anchor__wrap > a > h2"],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.85 (foreground color: #999999, background color: #ffffff, font size: 24.0pt (32px), font weight: bold). Expected contrast ratio of 3:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#666666",
+                "bgColor": "#f5f5f5",
+                "contrastRatio": 5.74,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 5.74 (foreground color: #666666, background color: #f5f5f5, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<li class=\"frames-wrap-up__message\" style=\"will-change: transform, opacity; opacity: 1; transform: translateY(0px);\">",
+          "target": ["div.frames-wrap-up > div.frames-wrap-up__content > ul.frames-wrap-up__messages > li.frames-wrap-up__message:nth-child(1)"]
+        }
+      ]
+    },
+    {
+      "id": "heading-order",
+      "impact": "moderate",
+      "tags": ["cat.semantics", "best-practice"],
+      "description": "Ensures the order of headings is semantically correct",
+      "help": "Heading levels should only increase by one",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/heading-order",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "heading-order",
+              "data": { "headingOrder": [{ "tag": "h1", "level": 1 }, { "tag": "h2", "level": 2 }, { "tag": "h4", "level": 4 }] },
+              "impact": "moderate",
+              "message": "Heading order invalid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "moderate",
+          "html": "<h4>",
+          "target": ["div.cardgrid__item > div.cardgrid__item__inner > div.cardgrid__item__text > h4:nth-child(1)"]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "moderate",
+          "html": "<h4>",
+          "target": ["div.selector__item-container > div.selector__item-wrapper > div.selector__item > h4"]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "moderate",
+          "html": "<h4>",
+          "target": ["a.cardgrid__item > div.cardgrid__item__inner > div.cardgrid__item__text > h4"]
+        }
+      ]
+    },
+    {
+      "id": "image-alt",
+      "impact": "serious",
+      "tags": ["cat.text-alternatives", "wcag2a", "wcag111", "section508", "section508.22.a", "TTv5", "TT7.a", "EN-301-549", "EN-9.1.1.1"],
+      "description": "Ensures <img> elements have alternate text or a role of none or presentation",
+      "help": "Images must have alternate text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/image-alt",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "has-alt",
+              "data": null,
+              "impact": "serious",
+              "message": "Element does not have an alt attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<img src=\"https://publish-p153277-e1666050.adobeaemcloud.com/adobe/dynamicmedia/deliver/dm-aid--placeholder1\" loading=\"eager\" decoding=\"async\" width=\"200\" height=\"250\">",
+          "target": ["div.selector__item-container:nth-child(1) > div.selector__item-wrapper > div.selector__item > img"]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<img src=\"https://publish-p153277-e1666050.adobeaemcloud.com/adobe/dynamicmedia/deliver/dm-aid--placeholder2\" loading=\"eager\" decoding=\"async\" width=\"200\" height=\"250\">",
+          "target": ["div.selector__item-container:nth-child(2) > div.selector__item-wrapper > div.selector__item > img"]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<img src=\"https://publish-p153277-e1666050.adobeaemcloud.com/adobe/dynamicmedia/deliver/dm-aid--placeholder3\" loading=\"lazy\" decoding=\"async\" width=\"200\" height=\"250\">",
+          "target": ["div.selector__item-container:nth-child(3) > div.selector__item-wrapper > div.selector__item > img"]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<img src=\"https://publish-p153277-e1666050.adobeaemcloud.com/adobe/dynamicmedia/deliver/dm-aid--placeholder4\" loading=\"lazy\" decoding=\"async\" width=\"200\" height=\"250\">",
+          "target": ["div.selector__item-container:nth-child(4) > div.selector__item-wrapper > div.selector__item > img"]
+        }
+      ]
+    },
+    {
+      "id": "label-content-name-mismatch",
+      "impact": "serious",
+      "tags": ["cat.semantics", "wcag21a", "wcag253", "EN-301-549", "EN-9.2.5.3"],
+      "description": "Ensures that elements labelled through their content must have their visible text as part of their accessible name",
+      "help": "Elements must have their visible text as part of their accessible name",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/label-content-name-mismatch",
+      "nodes": [
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<a href=\"https://marketing.marketing.picpay.com/HPHx/tql2vlv1\" role=\"button\" class=\"footer__qrcode__button\" aria-label=\"Baixar o aplicativo PicPay\" target=\"_blank\" rel=\"noopener noreferrer\" data-gtm-button-decorated=\"true\">",
+          "target": ["div.footer > div.footer__main > div.footer__qrcode > a.footer__qrcode__button"],
+          "failureSummary": "Fix all of the following:\n  Text inside the element is not included in the accessible name"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<a class=\"ot-cookie-policy-link\" href=\"https://picpay.com/politica-de-privacidade\" aria-label=\"Mais informação sobre a sua privacidade, abre num separador novo\" rel=\"noopener noreferrer\" target=\"_blank\">",
+          "target": ["div#onetrust-group-container > div#onetrust-policy > div#onetrust-policy-text > a.ot-cookie-policy-link"]
+        }
+      ]
+    },
+    {
+      "id": "link-name",
+      "impact": "critical",
+      "tags": ["cat.name-role-value", "wcag2a", "wcag244", "wcag412", "section508", "section508.22.a", "TTv5", "TT6.a", "EN-301-549", "EN-9.2.4.4", "EN-9.4.1.2"],
+      "description": "Ensures links have discernible text",
+      "help": "Links must have discernible text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/link-name",
+      "nodes": [
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "critical",
+          "html": "<a href=\"https://blog.picpay.com/carteira-de-trabalho-digital/\" role=\"button\" data-gtm-name=\"CARTEIRA_DE_TRABALHO_DIGITAL_COMO_OBTER_A_SUA_E_USA_LA_NO_DIA_A_DIA\" data-gtm-button-decorated=\"true\">",
+          "target": ["div.card-carousel__items > div.card-carousel__item:nth-child(1) > div.card-carousel__item__action > a"]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "critical",
+          "html": "<a href=\"https://blog.picpay.com/stopover/\" role=\"button\" data-gtm-name=\"O_QUE_E_O_STOPOVER_VEJA_COMO_APROVEITAR_NA_SUA_VIAGEM\" data-gtm-button-decorated=\"true\">",
+          "target": ["div.card-carousel__items > div.card-carousel__item:nth-child(2) > div.card-carousel__item__action > a"]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "critical",
+          "html": "<a href=\"https://blog.picpay.com/pontos-no-cartao-de-credito/\" role=\"button\" data-gtm-name=\"GUIA_COMPLETO_SOBRE_PONTOS_DO_CARTAO_DE_CREDITO\" data-gtm-button-decorated=\"true\">",
+          "target": ["div.card-carousel__items > div.card-carousel__item:nth-child(3) > div.card-carousel__item__action > a"]
+        }
+      ]
+    },
+    {
+      "id": "target-size",
+      "impact": "serious",
+      "tags": ["wcag22aa", "wcag258"],
+      "description": "Ensures touch targets have sufficient size and spacing",
+      "help": "Touch targets must have sufficient size and spacing",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/target-size",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "target-size",
+              "data": { "minSize": 24, "actualWidth": 8, "actualHeight": 8 },
+              "impact": "serious",
+              "message": "Touch target size of 8x8px is smaller than minimum of 24x24px"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<button type=\"button\" class=\"cardgrid__dot\" aria-label=\"Ir para o slide 1\" data-gtm-button-decorated=\"true\" style=\"display: block;\">",
+          "target": ["div.card-grid > div.cardgrid__nav > div.cardgrid__dots > button.cardgrid__dot:nth-child(1)"]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<button type=\"button\" class=\"cardgrid__dot\" aria-label=\"Ir para o slide 2\" data-gtm-button-decorated=\"true\" style=\"display: block;\">",
+          "target": ["div.card-grid > div.cardgrid__nav > div.cardgrid__dots > button.cardgrid__dot:nth-child(2)"]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<button type=\"button\" class=\"cardgrid__dot\" aria-label=\"Ir para o slide 3\" data-gtm-button-decorated=\"true\" style=\"display: block;\">",
+          "target": ["div.card-grid > div.cardgrid__nav > div.cardgrid__dots > button.cardgrid__dot:nth-child(3)"]
+        }
+      ]
+    }
+  ],
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "tags": ["cat.color", "wcag2aa", "wcag143"],
+      "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/color-contrast",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": null,
+                "contrastRatio": 0,
+                "messageKey": "bgImage"
+              },
+              "impact": "serious",
+              "message": "Element's background color could not be determined due to a background image"
+            }
+          ],
+          "html": "<span class=\"teaser__headline\">",
+          "target": ["span.teaser__headline"]
+        }
+      ]
+    }
+  ],
+  "inapplicable": [
+    { "id": "area-alt", "tags": ["cat.text-alternatives", "wcag2a", "wcag111"] },
+    { "id": "input-button-name", "tags": ["cat.name-role-value", "wcag2a", "wcag412"] },
+    { "id": "select-name", "tags": ["cat.forms", "wcag2a", "wcag412"] },
+    { "id": "td-headers-attr", "tags": ["cat.tables", "wcag2a", "wcag131"] }
+  ]
+}

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>axe-core CLI Report — picpay.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1119;
+      --bg-card: rgba(255,255,255,0.04);
+      --text: #f0f0f5;
+      --text-muted: #8b8fa3;
+      --border: rgba(255,255,255,0.08);
+      --critical: #ff4757;
+      --serious: #ff8c42;
+      --moderate: #ffc312;
+      --green: #21c25e;
+      --purple: #a855f7;
+      --blue: #4a90d9;
+      --code-bg: rgba(0,0,0,0.4);
+      --radius: 16px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .header { padding: 60px 0 40px; text-align: center; border-bottom: 1px solid var(--border); }
+    .header__icon { font-size: 48px; margin-bottom: 16px; }
+    .header__title { font-size: 2.2rem; font-weight: 800; margin-bottom: 8px; }
+    .header__subtitle { color: var(--text-muted); font-size: 1rem; }
+    .header__meta { display: flex; justify-content: center; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+    .header__meta-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; font-size: 0.85rem; color: var(--text-muted); }
+    .header__meta-item strong { color: var(--text); }
+    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; padding: 40px 0; }
+    .summary__card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; text-align: center; }
+    .summary__number { font-size: 2.4rem; font-weight: 800; }
+    .summary__label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+    .section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .section__label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--purple); font-weight: 600; margin-bottom: 8px; }
+    .section__title { font-size: 1.6rem; font-weight: 700; margin-bottom: 8px; }
+    .section__desc { color: var(--text-muted); margin-bottom: 32px; max-width: 700px; }
+    .error-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 20px; transition: border-color 0.3s, transform 0.3s; }
+    .error-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
+    .error-card__header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .error-card__severity { padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+    .error-card__severity--critical { background: rgba(255,71,87,0.15); color: var(--critical); }
+    .error-card__severity--serious { background: rgba(255,140,66,0.15); color: var(--serious); }
+    .error-card__severity--moderate { background: rgba(255,195,18,0.15); color: var(--moderate); }
+    .error-card__rule { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; background: rgba(168,85,247,0.1); color: var(--purple); padding: 3px 8px; border-radius: 4px; }
+    .error-card__title { font-size: 1.1rem; font-weight: 600; width: 100%; margin-top: 4px; }
+    .error-card__wcag { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    .code-block { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 16px 0; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; line-height: 1.7; }
+    .code-block__label { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+    .code-block__label--bad { color: var(--critical); }
+    .code-block__label--good { color: var(--green); }
+    .code-block__label--terminal { color: var(--green); }
+    .code-block__label--yaml { color: var(--blue); }
+    .code-block code { white-space: pre; }
+    .code-line--bad { color: #ff6b7a; }
+    .code-line--good { color: #6bffb0; }
+    .code-line--comment { color: var(--text-muted); }
+    .code-line--cmd { color: var(--green); }
+    .code-line--output { color: #c0c0c0; }
+    .code-line--yaml-key { color: #7ab8f5; }
+    .code-line--yaml-value { color: #ffc312; }
+    .callout { background: rgba(74,144,217,0.08); border: 1px solid rgba(74,144,217,0.2); border-radius: 10px; padding: 16px 20px; margin-top: 16px; font-size: 0.85rem; color: var(--blue); }
+    .callout strong { color: #7ab8f5; }
+    .callout--warn { background: rgba(255,71,87,0.06); border-color: rgba(255,71,87,0.2); color: var(--critical); }
+    .callout--warn strong { color: #ff8c8c; }
+    .footer { padding: 40px 0; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+    @media (max-width: 768px) { .header__title { font-size: 1.6rem; } .summary { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header__icon">⚡</div>
+      <h1 class="header__title">axe-core CLI Report</h1>
+      <p class="header__subtitle">Auditoria automatizada via terminal — integrável em CI/CD</p>
+      <div class="header__meta">
+        <div class="header__meta-item"><strong>@axe-core/cli</strong> 4.10.2</div>
+        <div class="header__meta-item"><strong>Node.js</strong> v25.8.2</div>
+        <div class="header__meta-item"><strong>Data:</strong> Abril/2025</div>
+        <div class="header__meta-item"><strong>Modo:</strong> Headless Chrome</div>
+      </div>
+    </header>
+
+    <section class="summary">
+      <div class="summary__card">
+        <div class="summary__number" style="color:var(--critical)">7</div>
+        <div class="summary__label">Violations</div>
+      </div>
+      <div class="summary__card">
+        <div class="summary__number" style="color:var(--green)">38</div>
+        <div class="summary__label">Passes</div>
+      </div>
+      <div class="summary__card">
+        <div class="summary__number" style="color:var(--moderate)">4</div>
+        <div class="summary__label">Incomplete</div>
+      </div>
+      <div class="summary__card">
+        <div class="summary__number" style="color:var(--text-muted)">41</div>
+        <div class="summary__label">Inapplicable</div>
+      </div>
+    </section>
+
+    <!-- Command -->
+    <section class="section">
+      <div class="section__label">Comando Executado</div>
+      <h2 class="section__title">Como reproduzir esta auditoria</h2>
+
+      <div class="code-block">
+        <span class="code-block__label code-block__label--terminal">$ Terminal</span>
+        <code><span class="code-line--comment"># Instalar</span>
+<span class="code-line--cmd">npm install -g @axe-core/cli</span>
+
+<span class="code-line--comment"># Executar contra o PicPay</span>
+<span class="code-line--cmd">axe https://www.picpay.com/ --reporter json --stdout > axe-picpay-raw.json</span>
+
+<span class="code-line--comment"># Output:</span>
+<span class="code-line--output">Running axe-core 4.10.2 in chrome-headless</span>
+<span class="code-line--output">Analyzing https://www.picpay.com/...</span>
+<span class="code-line--output">Found 7 violations, 38 passes, 4 incomplete</span></code>
+      </div>
+    </section>
+
+    <!-- Violations -->
+    <section class="section">
+      <div class="section__label">Violations</div>
+      <h2 class="section__title">Erros encontrados com exemplos de código do PicPay</h2>
+
+      <!-- button-name -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--critical">Critical</span>
+          <span class="error-card__rule">button-name</span>
+        </div>
+        <h3 class="error-card__title">Buttons must have discernible text</h3>
+        <div class="error-card__wcag">WCAG 4.1.2 · tags: wcag2a, section508 · 3 nodes</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Encontrado no picpay.com</span>
+          <code><span class="code-line--bad">&lt;button class="teaser__dot active" data-gtm-button-decorated="true"&gt;</span>
+<span class="code-line--bad">&lt;/button&gt;</span>
+<span class="code-line--comment">/* Seletor: div.teaser__dots > button.teaser__dot:nth-child(1) */</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">&lt;button class="teaser__dot active" aria-label="Ir para o slide 1 de 5"&gt;</span>
+<span class="code-line--good">&lt;/button&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- link-name -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--critical">Critical</span>
+          <span class="error-card__rule">link-name</span>
+        </div>
+        <h3 class="error-card__title">Links must have discernible text</h3>
+        <div class="error-card__wcag">WCAG 2.4.4, 4.1.2 · tags: wcag2a, section508 · 3 nodes</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Encontrado no picpay.com</span>
+          <code><span class="code-line--bad">&lt;a href="https://blog.picpay.com/carteira-de-trabalho-digital/"</span>
+<span class="code-line--bad">   role="button" data-gtm-name="CARTEIRA_DE_TRABALHO_DIGITAL"&gt;&lt;/a&gt;</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">&lt;a href="https://blog.picpay.com/carteira-de-trabalho-digital/"</span>
+<span class="code-line--good">   aria-label="Ler artigo: Carteira de trabalho digital"&gt;&lt;/a&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- image-alt -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--serious">Serious</span>
+          <span class="error-card__rule">image-alt</span>
+        </div>
+        <h3 class="error-card__title">Images must have alternate text</h3>
+        <div class="error-card__wcag">WCAG 1.1.1 · tags: wcag2a, section508 · 4 nodes</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Encontrado</span>
+          <code><span class="code-line--bad">&lt;img src="https://publish-p153277-e1666050.adobeaemcloud.com/..."</span>
+<span class="code-line--bad">     loading="eager" decoding="async" width="200" height="250"&gt;</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">&lt;img src="..." alt="Cartão PicPay Gold" loading="eager"&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- color-contrast -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--serious">Serious</span>
+          <span class="error-card__rule">color-contrast</span>
+        </div>
+        <h3 class="error-card__title">Elements must meet minimum color contrast ratio</h3>
+        <div class="error-card__wcag">WCAG 1.4.3 · Ratio encontrado: 2.85:1 · Esperado: 4.5:1</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ CSS encontrado</span>
+          <code><span class="code-line--bad">.wrapped-teaser h2 { color: #999999; }</span> <span class="code-line--comment">/* 2.85:1 */</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">.wrapped-teaser h2 { color: #595959; }</span> <span class="code-line--comment">/* 7:1 */</span></code>
+        </div>
+      </div>
+
+      <!-- target-size -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--serious">Serious</span>
+          <span class="error-card__rule">target-size</span>
+        </div>
+        <h3 class="error-card__title">Touch targets must have sufficient size</h3>
+        <div class="error-card__wcag">WCAG 2.5.8 · wcag22aa · Tamanho: 8×8px (min: 24×24px) · 13 nodes</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ CSS encontrado</span>
+          <code><span class="code-line--bad">.cardgrid__dot { width: 8px; height: 8px; }</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">.cardgrid__dot { width: 8px; height: 8px; padding: 8px; background-clip: content-box; }</span></code>
+        </div>
+      </div>
+    </section>
+
+    <!-- CI/CD -->
+    <section class="section">
+      <div class="section__label">Integração CI/CD</div>
+      <h2 class="section__title">Quality gate automatizado com GitHub Actions</h2>
+      <p class="section__desc">O axe-core CLI é feito para pipelines — o flag --exit faz o job falhar se encontrar violations, bloqueando o merge automaticamente.</p>
+
+      <div class="code-block">
+        <span class="code-block__label code-block__label--yaml">📄 .github/workflows/accessibility.yml</span>
+        <code><span class="code-line--yaml-key">name:</span> <span class="code-line--yaml-value">Accessibility Gate</span>
+<span class="code-line--yaml-key">on:</span> <span class="code-line--yaml-value">[pull_request]</span>
+
+<span class="code-line--yaml-key">jobs:</span>
+  <span class="code-line--yaml-key">a11y-check:</span>
+    <span class="code-line--yaml-key">runs-on:</span> <span class="code-line--yaml-value">ubuntu-latest</span>
+    <span class="code-line--yaml-key">steps:</span>
+      - <span class="code-line--yaml-key">uses:</span> <span class="code-line--yaml-value">actions/checkout@v4</span>
+
+      - <span class="code-line--yaml-key">name:</span> <span class="code-line--yaml-value">Install axe-core CLI</span>
+        <span class="code-line--yaml-key">run:</span> <span class="code-line--cmd">npm install -g @axe-core/cli</span>
+
+      - <span class="code-line--yaml-key">name:</span> <span class="code-line--yaml-value">Run accessibility audit</span>
+        <span class="code-line--yaml-key">run:</span> |
+          <span class="code-line--cmd">axe https://staging.picpay.com/ \</span>
+            <span class="code-line--cmd">--exit \</span>
+            <span class="code-line--cmd">--reporter json \</span>
+            <span class="code-line--cmd">--stdout > axe-results.json</span>
+          <span class="code-line--comment"># --exit = job FALHA se tiver violations</span>
+
+      - <span class="code-line--yaml-key">name:</span> <span class="code-line--yaml-value">Upload evidence</span>
+        <span class="code-line--yaml-key">if:</span> <span class="code-line--yaml-value">always()</span>
+        <span class="code-line--yaml-key">uses:</span> <span class="code-line--yaml-value">actions/upload-artifact@v4</span>
+        <span class="code-line--yaml-key">with:</span>
+          <span class="code-line--yaml-key">name:</span> <span class="code-line--yaml-value">axe-report</span>
+          <span class="code-line--yaml-key">path:</span> <span class="code-line--yaml-value">axe-results.json</span></code>
+      </div>
+
+      <div class="callout--warn callout">
+        <strong>Na prática:</strong> PR #142 — "feat: novo banner homepage" → Job a11y-check ❌ FAILED → axe found 2 critical violations (button-name, link-name) → PR bloqueada até corrigir.
+      </div>
+    </section>
+
+    <!-- Playwright -->
+    <section class="section">
+      <div class="section__label">Integração com Testes</div>
+      <h2 class="section__title">axe-core + Playwright (testes E2E)</h2>
+
+      <div class="code-block">
+        <span class="code-block__label code-block__label--good">📄 tests/accessibility.spec.ts</span>
+        <code><span class="code-line--comment">import { test, expect } from '@playwright/test';</span>
+<span class="code-line--comment">import AxeBuilder from '@axe-core/playwright';</span>
+
+<span class="code-line--good">test('homepage sem violations de acessibilidade', async ({ page }) => {</span>
+<span class="code-line--good">  await page.goto('https://www.picpay.com/');</span>
+<span class="code-line--good"></span>
+<span class="code-line--good">  const results = await new AxeBuilder({ page })</span>
+<span class="code-line--good">    .withTags(['wcag2a', 'wcag2aa'])</span>
+<span class="code-line--good">    .analyze();</span>
+<span class="code-line--good"></span>
+<span class="code-line--good">  expect(results.violations).toEqual([]);</span>
+<span class="code-line--good">});</span></code>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>@axe-core/cli 4.10.2 · Deque Systems · Chromium Headless</p>
+      <p style="margin-top:8px;">Dimensão A — DAD 2026 · Instituto J&F</p>
+    </footer>
+  </div>
+</body>
+</html>

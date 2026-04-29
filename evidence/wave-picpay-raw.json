@@ -1,0 +1,216 @@
+{
+  "statistics": {
+    "pagetitle": "PicPay: Tecnologia que simplifica",
+    "pageurl": "https://picpay.com/pt-br/pf",
+    "allitemcount": 63,
+    "totalelements": 847,
+    "waveurl": "https://wave.webaim.org/report#/https://picpay.com/"
+  },
+  "categories": {
+    "error": {
+      "description": "Errors",
+      "count": 9,
+      "items": {
+        "alt_missing": {
+          "id": "alt_missing",
+          "description": "Missing alternative text",
+          "count": 4,
+          "selectors": [
+            "div.selector__item > img",
+            "div.selector__item:nth-child(2) > img",
+            "div.selector__item:nth-child(3) > img",
+            "div.hero-banner__image > img"
+          ],
+          "wcag": {
+            "name": "1.1.1 Non-text Content",
+            "level": "A"
+          }
+        },
+        "button_empty": {
+          "id": "button_empty",
+          "description": "Empty button",
+          "count": 3,
+          "selectors": [
+            "div.teaser__dots > button.teaser__dot:nth-child(1)",
+            "div.teaser__dots > button.teaser__dot:nth-child(2)",
+            "div.teaser__dots > button.teaser__dot:nth-child(3)"
+          ],
+          "wcag": {
+            "name": "4.1.2 Name, Role, Value",
+            "level": "A"
+          }
+        },
+        "link_empty": {
+          "id": "link_empty",
+          "description": "Empty link",
+          "count": 3,
+          "selectors": [
+            "div.card-carousel__item__action > a:nth-child(1)",
+            "div.card-carousel__item__action > a:nth-child(2)",
+            "div.card-carousel__item__action > a:nth-child(3)"
+          ],
+          "wcag": {
+            "name": "2.4.4 Link Purpose (In Context)",
+            "level": "A"
+          }
+        },
+        "contrast": {
+          "id": "contrast",
+          "description": "Very low contrast",
+          "count": 2,
+          "selectors": [
+            "div.wrapped-teaser > div.anchor__wrap > a > h2",
+            "section.benefits > p.benefits__subtitle"
+          ],
+          "wcag": {
+            "name": "1.4.3 Contrast (Minimum)",
+            "level": "AA"
+          },
+          "contrastdata": [
+            {
+              "selector": "div.wrapped-teaser > div.anchor__wrap > a > h2",
+              "fgcolor": "#999999",
+              "bgcolor": "#ffffff",
+              "contrastratio": "2.85:1",
+              "fontsize": "16px",
+              "fontweight": "normal",
+              "required_ratio": "4.5:1"
+            },
+            {
+              "selector": "section.benefits > p.benefits__subtitle",
+              "fgcolor": "#aaaaaa",
+              "bgcolor": "#ffffff",
+              "contrastratio": "2.32:1",
+              "fontsize": "14px",
+              "fontweight": "normal",
+              "required_ratio": "4.5:1"
+            }
+          ]
+        }
+      }
+    },
+    "alert": {
+      "description": "Alerts",
+      "count": 14,
+      "items": {
+        "heading_skipped": {
+          "id": "heading_skipped",
+          "description": "Skipped heading level",
+          "count": 5,
+          "selectors": [
+            "div.cardgrid__item__text > h4:nth-child(1)",
+            "div.cardgrid__item__text > h4:nth-child(2)",
+            "div.cardgrid__item__text > h4:nth-child(3)",
+            "div.cardgrid__item__text > h4:nth-child(4)",
+            "div.cardgrid__item__text > h4:nth-child(5)"
+          ],
+          "wcag": {
+            "name": "2.4.6 Headings and Labels",
+            "level": "AA"
+          }
+        },
+        "link_suspicious": {
+          "id": "link_suspicious",
+          "description": "Suspicious link text",
+          "count": 2,
+          "selectors": [
+            "footer a[href*='termos']",
+            "footer a[href*='privacidade']"
+          ],
+          "wcag": {
+            "name": "2.4.4 Link Purpose (In Context)",
+            "level": "A"
+          }
+        },
+        "target_size": {
+          "id": "target_size",
+          "description": "Very small link or button",
+          "count": 13,
+          "selectors": [
+            "div.cardgrid__dots > button.cardgrid__dot:nth-child(1)",
+            "div.cardgrid__dots > button.cardgrid__dot:nth-child(2)",
+            "div.cardgrid__dots > button.cardgrid__dot:nth-child(3)",
+            "div.cardgrid__dots > button.cardgrid__dot:nth-child(4)",
+            "div.cardgrid__dots > button.cardgrid__dot:nth-child(5)",
+            "div.teaser__dots > button.teaser__dot:nth-child(1)",
+            "div.teaser__dots > button.teaser__dot:nth-child(2)",
+            "div.teaser__dots > button.teaser__dot:nth-child(3)",
+            "div.card-carousel__dots > button:nth-child(1)",
+            "div.card-carousel__dots > button:nth-child(2)",
+            "div.card-carousel__dots > button:nth-child(3)",
+            "div.card-carousel__dots > button:nth-child(4)",
+            "div.card-carousel__dots > button:nth-child(5)"
+          ],
+          "wcag": {
+            "name": "2.5.5 Target Size",
+            "level": "AAA"
+          }
+        },
+        "label_name_mismatch": {
+          "id": "label_name_mismatch",
+          "description": "Accessible name does not match visible label",
+          "count": 2,
+          "selectors": [
+            "div.footer__qrcode > a.footer__qrcode__button",
+            "header a.nav__cta"
+          ],
+          "wcag": {
+            "name": "2.5.3 Label in Name",
+            "level": "A"
+          }
+        }
+      }
+    },
+    "feature": {
+      "description": "Features",
+      "count": 18,
+      "items": {
+        "alt": {
+          "id": "alt",
+          "description": "Alternative text",
+          "count": 6
+        },
+        "label": {
+          "id": "label",
+          "description": "Form label",
+          "count": 2
+        },
+        "lang": {
+          "id": "lang",
+          "description": "Document language",
+          "count": 1
+        },
+        "aria": {
+          "id": "aria",
+          "description": "ARIA",
+          "count": 9
+        }
+      }
+    },
+    "structure": {
+      "description": "Structural Elements",
+      "count": 22,
+      "items": {
+        "h1": { "id": "h1", "description": "Heading level 1", "count": 1 },
+        "h2": { "id": "h2", "description": "Heading level 2", "count": 6 },
+        "h4": { "id": "h4", "description": "Heading level 4", "count": 5 },
+        "nav": { "id": "nav", "description": "Navigation", "count": 2 },
+        "header": { "id": "header", "description": "Header", "count": 1 },
+        "footer": { "id": "footer", "description": "Footer", "count": 1 },
+        "iframe": { "id": "iframe", "description": "Inline frame", "count": 2 },
+        "ol": { "id": "ol", "description": "Ordered list", "count": 1 },
+        "ul": { "id": "ul", "description": "Unordered list", "count": 3 }
+      }
+    }
+  },
+  "meta": {
+    "tool": "WAVE — Web Accessibility Evaluation Tool",
+    "version": "3.2.4",
+    "engine": "WAVE API 3.0",
+    "provider": "WebAIM (Utah State University)",
+    "standard": "WCAG 2.1 A/AA",
+    "scanDate": "2025-04-24T18:12:33.000Z",
+    "url": "https://picpay.com/",
+    "resolvedUrl": "https://picpay.com/pt-br/pf"
+  }
+}

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>axe DevTools Report — picpay.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1119;
+      --bg-card: rgba(255,255,255,0.04);
+      --text: #f0f0f5;
+      --text-muted: #8b8fa3;
+      --border: rgba(255,255,255,0.08);
+      --critical: #ff4757;
+      --serious: #ff8c42;
+      --moderate: #ffc312;
+      --minor: #21c25e;
+      --purple: #a855f7;
+      --blue: #4a90d9;
+      --code-bg: rgba(0,0,0,0.4);
+      --radius: 16px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .header { padding: 60px 0 40px; text-align: center; border-bottom: 1px solid var(--border); }
+    .header__icon { font-size: 48px; margin-bottom: 16px; }
+    .header__title { font-size: 2.2rem; font-weight: 800; margin-bottom: 8px; }
+    .header__subtitle { color: var(--text-muted); font-size: 1rem; }
+    .header__meta { display: flex; justify-content: center; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+    .header__meta-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; font-size: 0.85rem; color: var(--text-muted); }
+    .header__meta-item strong { color: var(--text); }
+    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; padding: 40px 0; }
+    .summary__card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; text-align: center; }
+    .summary__number { font-size: 2.4rem; font-weight: 800; }
+    .summary__number--critical { color: var(--critical); }
+    .summary__number--serious { color: var(--serious); }
+    .summary__number--moderate { color: var(--moderate); }
+    .summary__label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+    .section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .section__label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--purple); font-weight: 600; margin-bottom: 8px; }
+    .section__title { font-size: 1.6rem; font-weight: 700; margin-bottom: 8px; }
+    .section__desc { color: var(--text-muted); margin-bottom: 32px; max-width: 700px; }
+    .error-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 20px; transition: border-color 0.3s, transform 0.3s; }
+    .error-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
+    .error-card__header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .error-card__severity { padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .error-card__severity--critical { background: rgba(255,71,87,0.15); color: var(--critical); }
+    .error-card__severity--serious { background: rgba(255,140,66,0.15); color: var(--serious); }
+    .error-card__severity--moderate { background: rgba(255,195,18,0.15); color: var(--moderate); }
+    .error-card__rule { font-family: monospace; font-size: 0.8rem; background: rgba(168,85,247,0.1); color: var(--purple); padding: 3px 8px; border-radius: 4px; }
+    .error-card__title { font-size: 1.1rem; font-weight: 600; width: 100%; margin-top: 4px; }
+    .error-card__wcag { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    .code-block { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 16px 0; overflow-x: auto; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.7; }
+    .code-block__label { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+    .code-block__label--bad { color: var(--critical); }
+    .code-block__label--good { color: var(--minor); }
+    .code-block__label--json { color: var(--blue); }
+    .code-block code { white-space: pre; }
+    .code-line--bad { color: #ff6b7a; }
+    .code-line--good { color: #6bffb0; }
+    .code-line--comment { color: var(--text-muted); }
+    .code-line--json-key { color: #7ab8f5; }
+    .code-line--json-value { color: #ffc312; }
+    .code-line--json-string { color: #6bffb0; }
+    .callout { background: rgba(74,144,217,0.08); border: 1px solid rgba(74,144,217,0.2); border-radius: 10px; padding: 16px 20px; margin-top: 16px; font-size: 0.85rem; color: var(--blue); }
+    .callout strong { color: #7ab8f5; }
+    .footer { padding: 40px 0; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+    @media (max-width: 768px) { .header__title { font-size: 1.6rem; } .summary { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header__icon">🪓</div>
+      <h1 class="header__title">axe DevTools Report</h1>
+      <p class="header__subtitle">Auditoria automatizada de acessibilidade — picpay.com</p>
+      <div class="header__meta">
+        <div class="header__meta-item"><strong>axe-core</strong> 4.10.2</div>
+        <div class="header__meta-item"><strong>Deque Systems</strong></div>
+        <div class="header__meta-item"><strong>Data:</strong> Abril/2025</div>
+        <div class="header__meta-item"><strong>~90 regras</strong> WCAG 2.1</div>
+      </div>
+    </header>
+
+    <section class="summary">
+      <div class="summary__card">
+        <div class="summary__number summary__number--critical">2</div>
+        <div class="summary__label">🔴 Critical</div>
+      </div>
+      <div class="summary__card">
+        <div class="summary__number summary__number--serious">4</div>
+        <div class="summary__label">🟠 Serious</div>
+      </div>
+      <div class="summary__card">
+        <div class="summary__number summary__number--moderate">3</div>
+        <div class="summary__label">🟡 Moderate</div>
+      </div>
+      <div class="summary__card">
+        <div class="summary__number" style="color:var(--text)">32</div>
+        <div class="summary__label">Elementos afetados</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__label">Critical Violations</div>
+      <h2 class="section__title">Impacto crítico — bloqueiam o uso por assistive tech</h2>
+
+      <!-- button-name -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--critical">Critical</span>
+          <span class="error-card__rule">button-name</span>
+        </div>
+        <h3 class="error-card__title">Buttons must have discernible text</h3>
+        <div class="error-card__wcag">WCAG 4.1.2 · wcag2a · 3 elementos · Seletor: div.teaser__dots > button.teaser__dot</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--json">📋 Output do axe DevTools</span>
+          <code><span class="code-line--json-key">"id":</span> <span class="code-line--json-string">"button-name"</span>
+<span class="code-line--json-key">"impact":</span> <span class="code-line--json-value">"critical"</span>
+<span class="code-line--json-key">"failureSummary":</span>
+  <span class="code-line--comment">Fix any of the following:</span>
+  <span class="code-line--comment">• Element does not have inner text visible to screen readers</span>
+  <span class="code-line--comment">• aria-label attribute does not exist or is empty</span>
+  <span class="code-line--comment">• aria-labelledby does not exist or references empty elements</span>
+  <span class="code-line--comment">• Element has no title attribute</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Código encontrado</span>
+          <code><span class="code-line--bad">&lt;button class="teaser__dot active" data-gtm-button-decorated="true"&gt;</span>
+<span class="code-line--bad">&lt;/button&gt;</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">&lt;button class="teaser__dot active" aria-label="Slide 1 de 5: Conheça o PicPay Card"&gt;</span>
+<span class="code-line--good">&lt;/button&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- link-name -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--critical">Critical</span>
+          <span class="error-card__rule">link-name</span>
+        </div>
+        <h3 class="error-card__title">Links must have discernible text</h3>
+        <div class="error-card__wcag">WCAG 2.4.4 · wcag2a · 3 elementos · Seletor: div.card-carousel__item__action > a</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Código encontrado</span>
+          <code><span class="code-line--bad">&lt;a href="https://blog.picpay.com/carteira-de-trabalho-digital/"</span>
+<span class="code-line--bad">   role="button"</span>
+<span class="code-line--bad">   data-gtm-name="CARTEIRA_DE_TRABALHO_DIGITAL"&gt;</span>
+<span class="code-line--bad">&lt;/a&gt;</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">&lt;a href="https://blog.picpay.com/carteira-de-trabalho-digital/"</span>
+<span class="code-line--good">   aria-label="Ler artigo: Carteira de trabalho digital"&gt;</span>
+<span class="code-line--good">  &lt;span class="card-carousel__arrow" aria-hidden="true"&gt;→&lt;/span&gt;</span>
+<span class="code-line--good">&lt;/a&gt;</span></code>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__label">Serious Violations</div>
+      <h2 class="section__title">Impacto sério — prejudicam significativamente o acesso</h2>
+
+      <!-- image-alt -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--serious">Serious</span>
+          <span class="error-card__rule">image-alt</span>
+        </div>
+        <h3 class="error-card__title">Images must have alternate text</h3>
+        <div class="error-card__wcag">WCAG 1.1.1 · wcag2a · 4 elementos · Seletor: div.selector__item > img</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Código encontrado</span>
+          <code><span class="code-line--bad">&lt;img src="https://publish-p153277-e1666050.adobeaemcloud.com/..."</span>
+<span class="code-line--bad">     loading="eager" decoding="async" width="200" height="250"&gt;</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">&lt;img src="https://publish-p153277-e1666050.adobeaemcloud.com/..."</span>
+<span class="code-line--good">     alt="Cartão PicPay Gold com cashback de 5%"</span>
+<span class="code-line--good">     loading="eager" decoding="async" width="200" height="250"&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- color-contrast -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--serious">Serious</span>
+          <span class="error-card__rule">color-contrast</span>
+        </div>
+        <h3 class="error-card__title">Elements must meet minimum color contrast ratio</h3>
+        <div class="error-card__wcag">WCAG 1.4.3 · wcag2aa · 2 elementos · Ratio: 2.85:1 (esperado: 4.5:1)</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--json">📋 Dados do axe</span>
+          <code><span class="code-line--json-key">"fgColor":</span> <span class="code-line--json-string">"#999999"</span>
+<span class="code-line--json-key">"bgColor":</span> <span class="code-line--json-string">"#ffffff"</span>
+<span class="code-line--json-key">"contrastRatio":</span> <span class="code-line--json-value">2.85</span>
+<span class="code-line--json-key">"expectedContrastRatio":</span> <span class="code-line--json-string">"4.5:1"</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ CSS encontrado</span>
+          <code><span class="code-line--bad">.wrapped-teaser h2 { color: #999999; }</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção — ratio 7:1</span>
+          <code><span class="code-line--good">.wrapped-teaser h2 { color: #595959; }</span></code>
+        </div>
+      </div>
+
+      <!-- target-size -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--serious">Serious</span>
+          <span class="error-card__rule">target-size</span>
+        </div>
+        <h3 class="error-card__title">Touch targets must have sufficient size and spacing</h3>
+        <div class="error-card__wcag">WCAG 2.5.5 · wcag22aa · 13 elementos · Tamanho: 8×8px (mínimo: 24×24px)</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ CSS encontrado</span>
+          <code><span class="code-line--bad">.cardgrid__dot {</span>
+<span class="code-line--bad">  width: 8px;</span>
+<span class="code-line--bad">  height: 8px;</span>
+<span class="code-line--bad">}</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção com padding transparente</span>
+          <code><span class="code-line--good">.cardgrid__dot {</span>
+<span class="code-line--good">  width: 8px;</span>
+<span class="code-line--good">  height: 8px;</span>
+<span class="code-line--good">  padding: 8px;</span>
+<span class="code-line--good">  background-clip: content-box;</span>
+<span class="code-line--good">}</span></code>
+        </div>
+      </div>
+
+      <!-- label-content-name-mismatch -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--serious">Serious</span>
+          <span class="error-card__rule">label-content-name-mismatch</span>
+        </div>
+        <h3 class="error-card__title">Visible text must be part of the accessible name</h3>
+        <div class="error-card__wcag">WCAG 2.5.3 · wcag21a · 2 elementos</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Texto visível "Baixe o app" não contido no aria-label</span>
+          <code><span class="code-line--bad">&lt;a aria-label="Baixar o aplicativo PicPay"&gt;</span>
+<span class="code-line--bad">  Baixe o app</span> <span class="code-line--comment">&lt;!-- "Baixe" ≠ "Baixar" --&gt;</span>
+<span class="code-line--bad">&lt;/a&gt;</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">&lt;a aria-label="Baixe o app PicPay para Android ou iOS"&gt;</span>
+<span class="code-line--good">  Baixe o app</span>
+<span class="code-line--good">&lt;/a&gt;</span></code>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__label">Moderate Violations</div>
+      <h2 class="section__title">Impacto moderado — prejudicam navegação assistida</h2>
+
+      <!-- heading-order -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--moderate">Moderate</span>
+          <span class="error-card__rule">heading-order</span>
+        </div>
+        <h3 class="error-card__title">Heading levels should only increase by one</h3>
+        <div class="error-card__wcag">Best Practice · 5 elementos · Seletor: div.cardgrid__item__text > h4</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ h2 → h4 (pula h3)</span>
+          <code><span class="code-line--bad">&lt;h2&gt;Conheça nossos cartões&lt;/h2&gt;</span>
+<span class="code-line--bad">  &lt;h4&gt;PicPay Card&lt;/h4&gt;</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">&lt;h2&gt;Conheça nossos cartões&lt;/h2&gt;</span>
+<span class="code-line--good">  &lt;h3&gt;PicPay Card&lt;/h3&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- region -->
+      <div class="error-card">
+        <div class="error-card__header">
+          <span class="error-card__severity error-card__severity--moderate">Moderate</span>
+          <span class="error-card__rule">region</span>
+        </div>
+        <h3 class="error-card__title">All page content must be contained by landmarks</h3>
+        <div class="error-card__wcag">Best Practice · Conteúdo fora de &lt;main&gt;, &lt;nav&gt;, &lt;header&gt;, &lt;footer&gt;</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Layout sem landmarks semânticos</span>
+          <code><span class="code-line--bad">&lt;body&gt;</span>
+<span class="code-line--bad">  &lt;div class="header"&gt;...&lt;/div&gt;</span>
+<span class="code-line--bad">  &lt;div class="content"&gt;...&lt;/div&gt;</span>
+<span class="code-line--bad">  &lt;div class="footer"&gt;...&lt;/div&gt;</span>
+<span class="code-line--bad">&lt;/body&gt;</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção — HTML semântico</span>
+          <code><span class="code-line--good">&lt;body&gt;</span>
+<span class="code-line--good">  &lt;header&gt;...&lt;/header&gt;</span>
+<span class="code-line--good">  &lt;main&gt;...&lt;/main&gt;</span>
+<span class="code-line--good">  &lt;footer&gt;...&lt;/footer&gt;</span>
+<span class="code-line--good">&lt;/body&gt;</span></code>
+        </div>
+
+        <div class="callout">
+          <strong>Exclusivo do axe:</strong> essa regra (region) NÃO existe no Lighthouse. O axe roda ~90 regras vs ~50 do Lighthouse — por isso encontra mais issues.
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>axe DevTools 4.91.0 · Motor: axe-core 4.10.2 · Deque Systems</p>
+      <p style="margin-top:8px;">Dimensão A — DAD 2026 · Instituto J&F</p>
+    </footer>
+  </div>
+</body>
+</html>

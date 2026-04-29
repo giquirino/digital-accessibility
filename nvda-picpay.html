@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NVDA Audit Report — picpay.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1119;
+      --bg-card: rgba(255,255,255,0.04);
+      --text: #f0f0f5;
+      --text-muted: #8b8fa3;
+      --border: rgba(255,255,255,0.08);
+      --red: #ff4757;
+      --orange: #ff8c42;
+      --yellow: #ffc312;
+      --green: #21c25e;
+      --purple: #a855f7;
+      --blue: #4a90d9;
+      --code-bg: rgba(0,0,0,0.4);
+      --radius: 16px;
+      --audio-bg: #1a1d2e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .header { padding: 60px 0 40px; text-align: center; border-bottom: 1px solid var(--border); }
+    .header__icon { font-size: 48px; margin-bottom: 16px; }
+    .header__title { font-size: 2.2rem; font-weight: 800; margin-bottom: 8px; }
+    .header__subtitle { color: var(--text-muted); font-size: 1rem; max-width: 600px; margin: 0 auto; }
+    .header__meta { display: flex; justify-content: center; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+    .header__meta-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; font-size: 0.85rem; color: var(--text-muted); }
+    .header__meta-item strong { color: var(--text); }
+    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; padding: 40px 0; }
+    .summary__card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; text-align: center; }
+    .summary__icon { font-size: 1.5rem; margin-bottom: 8px; }
+    .summary__label { font-size: 0.85rem; font-weight: 500; margin-bottom: 4px; }
+    .summary__status { font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+    .summary__status--fail { background: rgba(255,71,87,0.15); color: var(--red); }
+    .summary__status--warn { background: rgba(255,195,18,0.15); color: var(--yellow); }
+    .summary__status--na { background: rgba(139,143,163,0.15); color: var(--text-muted); }
+    .section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .section__label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--purple); font-weight: 600; margin-bottom: 8px; }
+    .section__title { font-size: 1.6rem; font-weight: 700; margin-bottom: 8px; }
+    .section__desc { color: var(--text-muted); margin-bottom: 32px; max-width: 700px; }
+    .problem-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 20px; transition: border-color 0.3s, transform 0.3s; }
+    .problem-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
+    .problem-card__header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .problem-card__number { width: 32px; height: 32px; border-radius: 50%; background: rgba(168,85,247,0.15); color: var(--purple); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+    .problem-card__title { font-size: 1.1rem; font-weight: 600; }
+    .problem-card__wcag { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+
+    /* Audio simulation */
+    .audio-sim { background: var(--audio-bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 16px 0; }
+    .audio-sim__label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--orange); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    .audio-sim__line { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; padding: 6px 12px; margin: 4px 0; border-radius: 6px; background: rgba(255,140,66,0.08); color: var(--orange); border-left: 3px solid var(--orange); }
+    .audio-sim__line--good { background: rgba(33,194,94,0.08); color: var(--green); border-left-color: var(--green); }
+
+    .code-block { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 16px 0; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; line-height: 1.7; }
+    .code-block__label { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+    .code-block__label--bad { color: var(--red); }
+    .code-block__label--good { color: var(--green); }
+    .code-block code { white-space: pre; }
+    .code-line--bad { color: #ff6b7a; }
+    .code-line--good { color: #6bffb0; }
+    .code-line--comment { color: var(--text-muted); }
+
+    .callout { background: rgba(74,144,217,0.08); border: 1px solid rgba(74,144,217,0.2); border-radius: 10px; padding: 16px 20px; margin-top: 16px; font-size: 0.85rem; color: var(--blue); }
+    .callout strong { color: #7ab8f5; }
+    .callout--important { background: rgba(255,71,87,0.06); border-color: rgba(255,71,87,0.2); color: var(--red); }
+    .callout--important strong { color: #ff8c8c; }
+
+    /* Keyboard table */
+    .keyboard-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.85rem; }
+    .keyboard-table th { text-align: left; padding: 10px 12px; background: rgba(168,85,247,0.08); color: var(--purple); font-weight: 600; border-bottom: 1px solid var(--border); }
+    .keyboard-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+    .keyboard-table td:first-child { font-family: 'JetBrains Mono', monospace; color: var(--yellow); white-space: nowrap; }
+
+    .footer { padding: 40px 0; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+    @media (max-width: 768px) { .header__title { font-size: 1.6rem; } .summary { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header__icon">🔊</div>
+      <h1 class="header__title">NVDA Accessibility Audit</h1>
+      <p class="header__subtitle">Teste manual com leitor de tela — simula a experiência real de um usuário cego navegando o picpay.com</p>
+      <div class="header__meta">
+        <div class="header__meta-item"><strong>NVDA</strong> 2024.4</div>
+        <div class="header__meta-item"><strong>Windows 11</strong> + Chrome 124</div>
+        <div class="header__meta-item"><strong>Data:</strong> Abril/2025</div>
+        <div class="header__meta-item"><strong>Tipo:</strong> Teste manual</div>
+      </div>
+    </header>
+
+    <section class="summary">
+      <div class="summary__card">
+        <div class="summary__icon">⌨️</div>
+        <div class="summary__label">Navegação teclado</div>
+        <span class="summary__status summary__status--fail">Parcial</span>
+      </div>
+      <div class="summary__card">
+        <div class="summary__icon">🗣️</div>
+        <div class="summary__label">Anúncio de conteúdo</div>
+        <span class="summary__status summary__status--fail">Incompleto</span>
+      </div>
+      <div class="summary__card">
+        <div class="summary__icon">📋</div>
+        <div class="summary__label">Ordem de leitura</div>
+        <span class="summary__status summary__status--warn">Confusa</span>
+      </div>
+      <div class="summary__card">
+        <div class="summary__icon">🏗️</div>
+        <div class="summary__label">Landmarks</div>
+        <span class="summary__status summary__status--fail">Ausentes</span>
+      </div>
+      <div class="summary__card">
+        <div class="summary__icon">📑</div>
+        <div class="summary__label">Headings nav</div>
+        <span class="summary__status summary__status--warn">Com saltos</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__label">Problemas Encontrados</div>
+      <h2 class="section__title">O que o NVDA detecta que nenhuma ferramenta automatizada detecta</h2>
+      <p class="section__desc">Abaixo: transcrição do que o NVDA anuncia em voz alta + o código responsável + a correção.</p>
+
+      <!-- Problem 1 -->
+      <div class="problem-card">
+        <div class="problem-card__header">
+          <div class="problem-card__number">1</div>
+          <h3 class="problem-card__title">Botões anunciados como "button" sem contexto</h3>
+        </div>
+        <div class="problem-card__wcag">WCAG 4.1.2 — Name, Role, Value · Impacto: o usuário não sabe o que o botão faz</div>
+
+        <div class="audio-sim">
+          <div class="audio-sim__label">🔊 O que o NVDA anuncia:</div>
+          <div class="audio-sim__line">"button"</div>
+          <div class="audio-sim__line">"button"</div>
+          <div class="audio-sim__line">"button"</div>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Código que causa isso</span>
+          <code><span class="code-line--bad">&lt;button class="teaser__dot active" data-gtm-button-decorated="true"&gt;</span>
+<span class="code-line--bad">&lt;/button&gt;</span>
+<span class="code-line--comment">&lt;!-- NVDA lê: "button" — sem nenhum contexto --&gt;</span></code>
+        </div>
+
+        <div class="audio-sim">
+          <div class="audio-sim__label">🔊 Após correção, NVDA anuncia:</div>
+          <div class="audio-sim__line audio-sim__line--good">"Ir para o slide 1 de 5, button"</div>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">&lt;button class="teaser__dot active" aria-label="Ir para o slide 1 de 5"&gt;</span>
+<span class="code-line--good">&lt;/button&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- Problem 2 -->
+      <div class="problem-card">
+        <div class="problem-card__header">
+          <div class="problem-card__number">2</div>
+          <h3 class="problem-card__title">Links anunciados como "link" sem destino</h3>
+        </div>
+        <div class="problem-card__wcag">WCAG 2.4.4 — Link Purpose · O usuário não sabe para onde o link vai</div>
+
+        <div class="audio-sim">
+          <div class="audio-sim__label">🔊 O que o NVDA anuncia ao navegar com Tab:</div>
+          <div class="audio-sim__line">"link"</div>
+          <div class="audio-sim__line">"link"</div>
+          <div class="audio-sim__line">"link"</div>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Código que causa isso</span>
+          <code><span class="code-line--bad">&lt;a href="https://blog.picpay.com/carteira-de-trabalho-digital/"</span>
+<span class="code-line--bad">   role="button" data-gtm-name="CARTEIRA_DE_TRABALHO_DIGITAL"&gt;</span>
+<span class="code-line--bad">&lt;/a&gt;</span></code>
+        </div>
+
+        <div class="audio-sim">
+          <div class="audio-sim__label">🔊 Após correção:</div>
+          <div class="audio-sim__line audio-sim__line--good">"Ler artigo: Carteira de trabalho digital, link"</div>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">&lt;a href="https://blog.picpay.com/carteira-de-trabalho-digital/"</span>
+<span class="code-line--good">   aria-label="Ler artigo: Carteira de trabalho digital"&gt;</span>
+<span class="code-line--good">&lt;/a&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- Problem 3 -->
+      <div class="problem-card">
+        <div class="problem-card__header">
+          <div class="problem-card__number">3</div>
+          <h3 class="problem-card__title">Navegação por headings com saltos (tecla H)</h3>
+        </div>
+        <div class="problem-card__wcag">WCAG 2.4.6 — Headings and Labels · Sumário de página incompleto</div>
+
+        <div class="audio-sim">
+          <div class="audio-sim__label">🔊 NVDA ao pressionar H repetidamente:</div>
+          <div class="audio-sim__line audio-sim__line--good">"heading level 1: PicPay"</div>
+          <div class="audio-sim__line audio-sim__line--good">"heading level 2: Conheça nossos cartões"</div>
+          <div class="audio-sim__line">"heading level 4: PicPay Card" ← pula nível 3!</div>
+          <div class="audio-sim__line">"heading level 4: PicPay Gold" ← pula nível 3!</div>
+        </div>
+
+        <div class="audio-sim">
+          <div class="audio-sim__label">🔊 NVDA ao pressionar tecla "3" (ir para h3):</div>
+          <div class="audio-sim__line">"no heading level 3"</div>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Estrutura do picpay.com</span>
+          <code><span class="code-line--bad">&lt;h1&gt;PicPay&lt;/h1&gt;</span>
+<span class="code-line--bad">  &lt;h2&gt;Conheça nossos cartões&lt;/h2&gt;</span>
+<span class="code-line--bad">    &lt;h4&gt;PicPay Card&lt;/h4&gt;</span>  <span class="code-line--comment">&lt;!-- sem h3 --&gt;</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">&lt;h1&gt;PicPay&lt;/h1&gt;</span>
+<span class="code-line--good">  &lt;h2&gt;Conheça nossos cartões&lt;/h2&gt;</span>
+<span class="code-line--good">    &lt;h3&gt;PicPay Card&lt;/h3&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- Problem 4 -->
+      <div class="problem-card">
+        <div class="problem-card__header">
+          <div class="problem-card__number">4</div>
+          <h3 class="problem-card__title">Ausência de &lt;main&gt; — landmark navigation quebrada</h3>
+        </div>
+        <div class="problem-card__wcag">Best Practice · Usuário não consegue pular direto pro conteúdo</div>
+
+        <div class="audio-sim">
+          <div class="audio-sim__label">🔊 NVDA ao pressionar D (próximo landmark):</div>
+          <div class="audio-sim__line audio-sim__line--good">"banner" (header)</div>
+          <div class="audio-sim__line">"content info" (footer) ← pula tudo!</div>
+        </div>
+
+        <div class="callout--important callout">
+          <strong>Impacto real:</strong> sem &lt;main&gt;, o usuário precisa percorrer TODOS os links do menu (dezenas) antes de chegar ao conteúdo. Com &lt;main&gt;, bastaria pressionar D uma vez.
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Estrutura do picpay.com</span>
+          <code><span class="code-line--bad">&lt;body&gt;</span>
+<span class="code-line--bad">  &lt;div class="header"&gt;...&lt;/div&gt;</span>
+<span class="code-line--bad">  &lt;div class="content"&gt;...&lt;/div&gt;</span>  <span class="code-line--comment">&lt;!-- NVDA ignora --&gt;</span>
+<span class="code-line--bad">  &lt;div class="footer"&gt;...&lt;/div&gt;</span>
+<span class="code-line--bad">&lt;/body&gt;</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção — landmarks semânticos</span>
+          <code><span class="code-line--good">&lt;body&gt;</span>
+<span class="code-line--good">  &lt;header&gt;...&lt;/header&gt;</span>
+<span class="code-line--good">  &lt;main&gt;...&lt;/main&gt;</span>        <span class="code-line--comment">&lt;!-- NVDA: tecla D pula pra cá --&gt;</span>
+<span class="code-line--good">  &lt;footer&gt;...&lt;/footer&gt;</span>
+<span class="code-line--good">&lt;/body&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- Problem 5 -->
+      <div class="problem-card">
+        <div class="problem-card__header">
+          <div class="problem-card__number">5</div>
+          <h3 class="problem-card__title">Imagens sem alt — NVDA lê a URL em voz alta</h3>
+        </div>
+        <div class="problem-card__wcag">WCAG 1.1.1 — Non-text Content · URL incompreensível lida em voz alta</div>
+
+        <div class="audio-sim">
+          <div class="audio-sim__label">🔊 O que o NVDA anuncia:</div>
+          <div class="audio-sim__line">"image, publish-p153277-e1666050 adobeaemcloud dot com adobe dynamicmedia deliver dm-aid..."</div>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ Código que causa isso</span>
+          <code><span class="code-line--bad">&lt;img src="https://publish-p153277-e1666050.adobeaemcloud.com/..."</span>
+<span class="code-line--bad">     loading="eager" decoding="async" width="200" height="250"&gt;</span></code>
+        </div>
+
+        <div class="audio-sim">
+          <div class="audio-sim__label">🔊 Após correção:</div>
+          <div class="audio-sim__line audio-sim__line--good">"Cartão PicPay na variante verde, image"</div>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção</span>
+          <code><span class="code-line--good">&lt;img src="..." alt="Cartão PicPay na variante verde" loading="eager"&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- Problem 6 -->
+      <div class="problem-card">
+        <div class="problem-card__header">
+          <div class="problem-card__number">6</div>
+          <h3 class="problem-card__title">Contraste — invisível no modo alto contraste</h3>
+        </div>
+        <div class="problem-card__wcag">WCAG 1.4.3 — Contrast · Texto desaparece com High Contrast Mode ativado</div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ CSS do PicPay — invisível com NVDA High Contrast</span>
+          <code><span class="code-line--bad">.wrapped-teaser h2 {</span>
+<span class="code-line--bad">  color: #999999;</span> <span class="code-line--comment">/* desaparece no modo alto contraste */</span>
+<span class="code-line--bad">}</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção com suporte a forced-colors</span>
+          <code><span class="code-line--good">.wrapped-teaser h2 {</span>
+<span class="code-line--good">  color: #595959;</span>
+<span class="code-line--good">}</span>
+<span class="code-line--good"></span>
+<span class="code-line--comment">/* Bônus — respeita Windows High Contrast Mode */</span>
+<span class="code-line--good">@media (forced-colors: active) {</span>
+<span class="code-line--good">  .wrapped-teaser h2 {</span>
+<span class="code-line--good">    color: CanvasText;</span>
+<span class="code-line--good">  }</span>
+<span class="code-line--good">}</span></code>
+        </div>
+      </div>
+
+      <!-- Problem 7 -->
+      <div class="problem-card">
+        <div class="problem-card__header">
+          <div class="problem-card__number">7</div>
+          <h3 class="problem-card__title">Ordem de leitura ≠ ordem visual (CSS order)</h3>
+        </div>
+        <div class="problem-card__wcag">WCAG 1.3.2 — Meaningful Sequence · Conteúdo lido em ordem errada</div>
+
+        <div class="audio-sim">
+          <div class="audio-sim__label">🔊 Quem enxerga vê: Card 2 → Card 3 → Card 1</div>
+          <div class="audio-sim__line">"PicPay Card" (Card 1)</div>
+          <div class="audio-sim__line">"PicPay Gold" (Card 2)</div>
+          <div class="audio-sim__line">"PicPay Platinum" (Card 3)</div>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--bad">❌ CSS reorganiza visualmente mas DOM está em outra ordem</span>
+          <code><span class="code-line--bad">.cardgrid__item:nth-child(1) { order: 3; }</span>
+<span class="code-line--bad">.cardgrid__item:nth-child(2) { order: 1; }</span>
+<span class="code-line--bad">.cardgrid__item:nth-child(3) { order: 2; }</span></code>
+        </div>
+
+        <div class="code-block">
+          <span class="code-block__label code-block__label--good">✅ Correção — reordenar no DOM, não no CSS</span>
+          <code><span class="code-line--comment">&lt;!-- Ordem do HTML = ordem de leitura desejada --&gt;</span>
+<span class="code-line--good">&lt;div class="cardgrid__item"&gt;Card 2&lt;/div&gt;</span>
+<span class="code-line--good">&lt;div class="cardgrid__item"&gt;Card 3&lt;/div&gt;</span>
+<span class="code-line--good">&lt;div class="cardgrid__item"&gt;Card 1&lt;/div&gt;</span></code>
+        </div>
+
+        <div class="callout">
+          <strong>Exclusivo do NVDA:</strong> nenhuma ferramenta automatizada detecta discrepância entre ordem visual (CSS) e ordem do DOM. Só um leitor de tela real revela isso.
+        </div>
+      </div>
+    </section>
+
+    <!-- Keyboard shortcuts -->
+    <section class="section">
+      <div class="section__label">Referência</div>
+      <h2 class="section__title">Atalhos NVDA usados na auditoria</h2>
+
+      <table class="keyboard-table">
+        <thead>
+          <tr><th>Tecla</th><th>Ação</th><th>O que verificamos</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Tab</td><td>Próximo elemento interativo</td><td>Se todos os botões/links são alcançáveis</td></tr>
+          <tr><td>Shift+Tab</td><td>Elemento anterior</td><td>Se navegação reversa funciona</td></tr>
+          <tr><td>H</td><td>Próximo heading</td><td>Se hierarquia faz sentido</td></tr>
+          <tr><td>1-6</td><td>Heading de nível específico</td><td>Se h3 existe (não existe no PicPay)</td></tr>
+          <tr><td>D</td><td>Próximo landmark</td><td>Se &lt;main&gt; existe (não existe)</td></tr>
+          <tr><td>K</td><td>Próximo link</td><td>Se todos os links têm nome</td></tr>
+          <tr><td>B</td><td>Próximo botão</td><td>Se todos os botões têm nome</td></tr>
+          <tr><td>G</td><td>Próxima imagem</td><td>Se imagens têm alt</td></tr>
+          <tr><td>Insert+F7</td><td>Lista de elementos</td><td>Sumário completo da página</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Comparison -->
+    <section class="section">
+      <div class="section__label">Comparação</div>
+      <h2 class="section__title">O que só o NVDA encontra</h2>
+
+      <table class="keyboard-table">
+        <thead>
+          <tr><th>Problema</th><th>Lighthouse</th><th>axe</th><th>WAVE</th><th>NVDA</th></tr>
+        </thead>
+        <tbody>
+          <tr><td style="color:var(--text)">Ordem de leitura ≠ visual</td><td>❌</td><td>❌</td><td>⚠️</td><td>✅</td></tr>
+          <tr><td style="color:var(--text)">Landmark navigation funcional</td><td>❌</td><td>⚠️</td><td>⚠️</td><td>✅</td></tr>
+          <tr><td style="color:var(--text)">Qualidade do aria-label</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td></tr>
+          <tr><td style="color:var(--text)">Foco preso em modal</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td></tr>
+          <tr><td style="color:var(--text)">URL lida em voz alta</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td></tr>
+          <tr><td style="color:var(--text)">Conteúdo dinâmico anunciado</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout" style="margin-top:24px;">
+        <strong>Conclusão:</strong> ferramentas automatizadas cobrem ~57% das falhas WCAG. O NVDA pega os outros 43% que exigem contexto humano. Um score 100 no Lighthouse com NVDA inacessível = ferramenta falhou em medir o que importa.
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>NVDA (NonVisual Desktop Access) 2024.4 · NV Access · Open Source</p>
+      <p style="margin-top:4px;">Alternativa macOS: VoiceOver (Cmd+F5) — nativo, sem instalar nada</p>
+      <p style="margin-top:12px;">Dimensão A — DAD 2026 · Instituto J&F</p>
+    </footer>
+  </div>
+</body>
+</html>

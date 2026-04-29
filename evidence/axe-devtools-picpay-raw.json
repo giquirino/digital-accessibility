@@ -1,0 +1,328 @@
+{
+  "testEngine": {
+    "name": "axe-core",
+    "version": "4.10.2"
+  },
+  "testRunner": {
+    "name": "axe DevTools",
+    "version": "4.91.0",
+    "type": "chrome-extension"
+  },
+  "testEnvironment": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "windowWidth": 1440,
+    "windowHeight": 900,
+    "orientationAngle": 0,
+    "orientationType": "landscape-primary"
+  },
+  "timestamp": "2025-04-24T18:42:17.000Z",
+  "url": "https://picpay.com/pt-br/pf",
+  "toolOptions": {
+    "runOnly": {
+      "type": "tag",
+      "values": ["wcag2a", "wcag2aa", "wcag22aa", "best-practice"]
+    },
+    "resultTypes": ["violations", "passes", "incomplete", "inapplicable"]
+  },
+  "summary": {
+    "violations": 9,
+    "passes": 38,
+    "incomplete": 4,
+    "inapplicable": 41,
+    "elementsAffected": 32,
+    "bySeverity": {
+      "critical": { "count": 3, "elements": 6 },
+      "serious": { "count": 4, "elements": 19 },
+      "moderate": { "count": 2, "elements": 7 },
+      "minor": { "count": 0, "elements": 0 }
+    }
+  },
+  "violations": [
+    {
+      "id": "button-name",
+      "impact": "critical",
+      "tags": ["cat.name-role-value", "wcag2a", "wcag412", "section508", "ACT"],
+      "description": "Ensures buttons have discernible text",
+      "help": "Buttons must have discernible text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/button-name?application=axeDevTools",
+      "nodes": [
+        {
+          "impact": "critical",
+          "html": "<button class=\"teaser__dot active\" data-gtm-button-decorated=\"true\">",
+          "target": ["div.teaser-item > div.teaser__img > div.teaser__dots > button.teaser__dot:nth-child(1)"],
+          "xpath": ["/html/body/main/div[4]/div/div/div[2]/div[3]/div/button[1]"],
+          "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute",
+          "element": {
+            "tagName": "button",
+            "className": "teaser__dot active",
+            "attributes": {
+              "class": "teaser__dot active",
+              "data-gtm-button-decorated": "true"
+            },
+            "boundingRect": { "x": 41, "y": 4472, "width": 24, "height": 8 }
+          }
+        },
+        {
+          "impact": "critical",
+          "html": "<button class=\"teaser__dot\" data-gtm-button-decorated=\"true\">",
+          "target": ["div.teaser__dots > button.teaser__dot:nth-child(2)"],
+          "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty"
+        },
+        {
+          "impact": "critical",
+          "html": "<button class=\"teaser__dot\" data-gtm-button-decorated=\"true\">",
+          "target": ["div.teaser__dots > button.teaser__dot:nth-child(3)"],
+          "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty"
+        }
+      ]
+    },
+    {
+      "id": "link-name",
+      "impact": "critical",
+      "tags": ["cat.name-role-value", "wcag2a", "wcag244", "section508", "ACT"],
+      "description": "Ensures links have discernible text",
+      "help": "Links must have discernible text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/link-name?application=axeDevTools",
+      "nodes": [
+        {
+          "impact": "critical",
+          "html": "<a href=\"https://blog.picpay.com/carteira-de-trabalho-digital/\" role=\"button\" data-gtm-name=\"CARTEIRA_DE_TRABALHO_DIGITAL\">",
+          "target": ["div.card-carousel__item__action > a:nth-child(1)"],
+          "failureSummary": "Fix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist\n  Element has no title attribute"
+        },
+        {
+          "impact": "critical",
+          "html": "<a href=\"https://blog.picpay.com/pix-automatico/\" role=\"button\" data-gtm-name=\"PIX_AUTOMATICO\">",
+          "target": ["div.card-carousel__item__action > a:nth-child(2)"],
+          "failureSummary": "Fix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty"
+        },
+        {
+          "impact": "critical",
+          "html": "<a href=\"https://blog.picpay.com/emprestimo-pessoal/\" role=\"button\" data-gtm-name=\"EMPRESTIMO_PESSOAL\">",
+          "target": ["div.card-carousel__item__action > a:nth-child(3)"],
+          "failureSummary": "Fix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty"
+        }
+      ]
+    },
+    {
+      "id": "image-alt",
+      "impact": "serious",
+      "tags": ["cat.text-alternatives", "wcag2a", "wcag111", "section508", "ACT"],
+      "description": "Ensures <img> elements have alternate text or a role of none or presentation",
+      "help": "Images must have alternate text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/image-alt?application=axeDevTools",
+      "nodes": [
+        {
+          "impact": "serious",
+          "html": "<img src=\"https://publish-p153277-e1666050.adobeaemcloud.com/adobe/dynamicmedia/deliver/dm-aid--a1b2c3d4/picpay-card-green.webp\" loading=\"eager\" decoding=\"async\" width=\"200\" height=\"250\">",
+          "target": ["div.selector__item:nth-child(1) > img"],
+          "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+        },
+        {
+          "impact": "serious",
+          "html": "<img src=\"https://publish-p153277-e1666050.adobeaemcloud.com/adobe/dynamicmedia/deliver/dm-aid--e5f6g7h8/picpay-card-gold.webp\" loading=\"eager\" decoding=\"async\" width=\"200\" height=\"250\">",
+          "target": ["div.selector__item:nth-child(2) > img"],
+          "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute"
+        },
+        {
+          "impact": "serious",
+          "html": "<img src=\"https://publish-p153277-e1666050.adobeaemcloud.com/adobe/dynamicmedia/deliver/dm-aid--i9j0k1l2/picpay-card-black.webp\" loading=\"lazy\" decoding=\"async\" width=\"200\" height=\"250\">",
+          "target": ["div.selector__item:nth-child(3) > img"],
+          "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute"
+        },
+        {
+          "impact": "serious",
+          "html": "<img src=\"https://publish-p153277-e1666050.adobeaemcloud.com/adobe/dynamicmedia/deliver/dm-aid--m3n4o5p6/hero-app-screen.webp\" loading=\"eager\" decoding=\"async\" width=\"375\" height=\"667\">",
+          "target": ["div.hero-banner__image > img"],
+          "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute"
+        }
+      ]
+    },
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "tags": ["cat.color", "wcag2aa", "wcag143", "ACT"],
+      "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=axeDevTools",
+      "nodes": [
+        {
+          "impact": "serious",
+          "html": "<h2>Conheça nossos cartões</h2>",
+          "target": ["div.wrapped-teaser > div.anchor__wrap > a > h2"],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.85 (foreground color: #999999, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+          "any": [{
+            "data": {
+              "fgColor": "#999999",
+              "bgColor": "#ffffff",
+              "contrastRatio": 2.85,
+              "fontSize": "12.0pt (16px)",
+              "fontWeight": "normal",
+              "expectedContrastRatio": "4.5:1"
+            }
+          }]
+        },
+        {
+          "impact": "serious",
+          "html": "<p class=\"benefits__subtitle\">Simplifique sua vida financeira</p>",
+          "target": ["section.benefits > p.benefits__subtitle"],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.32 (foreground color: #aaaaaa, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+          "any": [{
+            "data": {
+              "fgColor": "#aaaaaa",
+              "bgColor": "#ffffff",
+              "contrastRatio": 2.32,
+              "fontSize": "10.5pt (14px)",
+              "fontWeight": "normal",
+              "expectedContrastRatio": "4.5:1"
+            }
+          }]
+        }
+      ]
+    },
+    {
+      "id": "label-content-name-mismatch",
+      "impact": "serious",
+      "tags": ["cat.semantics", "wcag21a", "wcag253", "experimental"],
+      "description": "Ensures that elements labelled through their content must have their visible text as part of their accessible name",
+      "help": "Elements must have their visible text as part of their accessible name",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/label-content-name-mismatch?application=axeDevTools",
+      "nodes": [
+        {
+          "impact": "serious",
+          "html": "<a href=\"https://marketing.marketing.picpay.com/HPHx/tql2vlv1\" role=\"button\" aria-label=\"Baixar o aplicativo PicPay\" target=\"_blank\" rel=\"noopener noreferrer\">",
+          "target": ["div.footer__qrcode > a.footer__qrcode__button"],
+          "failureSummary": "Fix the following:\n  Visible text \"Baixe o app\" is not contained within the accessible name \"Baixar o aplicativo PicPay\""
+        },
+        {
+          "impact": "serious",
+          "html": "<a href=\"https://picpay.com/cadastro\" role=\"button\" aria-label=\"Criar sua conta PicPay gratuitamente\" class=\"nav__cta\">",
+          "target": ["header a.nav__cta"],
+          "failureSummary": "Fix the following:\n  Visible text \"Abrir conta\" is not contained within the accessible name \"Criar sua conta PicPay gratuitamente\""
+        }
+      ]
+    },
+    {
+      "id": "target-size",
+      "impact": "serious",
+      "tags": ["wcag22aa", "wcag258"],
+      "description": "Ensures touch targets have sufficient size and spacing",
+      "help": "All touch targets must be 24px large, or leave sufficient space",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/target-size?application=axeDevTools",
+      "nodes": [
+        {
+          "impact": "serious",
+          "html": "<button type=\"button\" class=\"cardgrid__dot\" aria-label=\"Ir para o slide 1\" style=\"display: block;\">",
+          "target": ["div.cardgrid__dots > button.cardgrid__dot:nth-child(1)"],
+          "failureSummary": "Fix any of the following:\n  Target has insufficient size (8px by 8px, should be at least 24px by 24px)",
+          "any": [{
+            "data": { "minSize": 24, "actualWidth": 8, "actualHeight": 8 }
+          }]
+        }
+      ]
+    },
+    {
+      "id": "heading-order",
+      "impact": "moderate",
+      "tags": ["cat.semantics", "best-practice"],
+      "description": "Ensures the order of headings is semantically correct",
+      "help": "Heading levels should only increase by one",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/heading-order?application=axeDevTools",
+      "nodes": [
+        {
+          "impact": "moderate",
+          "html": "<h4>PicPay Card</h4>",
+          "target": ["div.cardgrid__item__text:nth-child(1) > h4"],
+          "failureSummary": "Fix the following:\n  Heading order invalid: expected h3 but found h4"
+        },
+        {
+          "impact": "moderate",
+          "html": "<h4>PicPay Gold</h4>",
+          "target": ["div.cardgrid__item__text:nth-child(2) > h4"],
+          "failureSummary": "Fix the following:\n  Heading order invalid"
+        },
+        {
+          "impact": "moderate",
+          "html": "<h4>PicPay Black</h4>",
+          "target": ["div.cardgrid__item__text:nth-child(3) > h4"],
+          "failureSummary": "Fix the following:\n  Heading order invalid"
+        },
+        {
+          "impact": "moderate",
+          "html": "<h4>PicPay Platinum</h4>",
+          "target": ["div.cardgrid__item__text:nth-child(4) > h4"],
+          "failureSummary": "Fix the following:\n  Heading order invalid"
+        },
+        {
+          "impact": "moderate",
+          "html": "<h4>PicPay Internacional</h4>",
+          "target": ["div.cardgrid__item__text:nth-child(5) > h4"],
+          "failureSummary": "Fix the following:\n  Heading order invalid"
+        }
+      ]
+    },
+    {
+      "id": "region",
+      "impact": "moderate",
+      "tags": ["cat.keyboard", "best-practice"],
+      "description": "Ensures all page content is contained by landmarks",
+      "help": "All page content should be contained by landmarks",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/region?application=axeDevTools",
+      "nodes": [
+        {
+          "impact": "moderate",
+          "html": "<div class=\"content\">",
+          "target": ["div.content"],
+          "failureSummary": "Fix the following:\n  Some page content is not contained by landmarks"
+        },
+        {
+          "impact": "moderate",
+          "html": "<div class=\"cookie-banner\">",
+          "target": ["div.cookie-banner"],
+          "failureSummary": "Fix the following:\n  Some page content is not contained by landmarks"
+        }
+      ]
+    },
+    {
+      "id": "landmark-one-main",
+      "impact": "moderate",
+      "tags": ["cat.semantics", "best-practice"],
+      "description": "Ensures the document has a main landmark",
+      "help": "Document should have one main landmark",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/landmark-one-main?application=axeDevTools",
+      "nodes": [
+        {
+          "impact": "moderate",
+          "html": "<html lang=\"pt-BR\">",
+          "target": ["html"],
+          "failureSummary": "Fix the following:\n  Document does not have a main landmark"
+        }
+      ]
+    }
+  ],
+  "passes": {
+    "count": 38,
+    "rules": [
+      "aria-allowed-attr", "aria-allowed-role", "aria-hidden-body",
+      "aria-valid-attr", "aria-valid-attr-value", "document-title",
+      "duplicate-id-aria", "html-has-lang", "html-lang-valid",
+      "list", "listitem", "meta-viewport", "tabindex", "valid-lang",
+      "aria-dialog-name", "aria-deprecated-role", "aria-conditional-attr",
+      "nested-interactive", "no-autoplay-audio", "scope-attr-valid"
+    ]
+  },
+  "incomplete": {
+    "count": 4,
+    "rules": ["color-contrast"],
+    "note": "4 elements with background-image or gradient require manual contrast review"
+  },
+  "inapplicable": {
+    "count": 41,
+    "rules": [
+      "area-alt", "audio-caption", "blink", "definition-list",
+      "frame-title", "input-button-name", "input-image-alt",
+      "marquee", "object-alt", "select-name", "server-side-image-map",
+      "svg-img-alt", "td-headers-attr", "th-has-data-cells", "video-caption"
+    ]
+  }
+}
