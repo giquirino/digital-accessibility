@@ -1,4 +1,4 @@
-# pesquisa-acessibilidade-a-mesa1
+# accessibility-research-a-table1
 
 **Research and hands-on project on digital accessibility testing tools — DAD 2026 · Instituto J&F**
 
